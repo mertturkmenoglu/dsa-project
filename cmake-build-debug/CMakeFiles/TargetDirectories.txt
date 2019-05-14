@@ -1,0 +1,3 @@
+/home/mert/codes/dsa-project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mert/codes/dsa-project/cmake-build-debug/CMakeFiles/dsa_project.dir
+/home/mert/codes/dsa-project/cmake-build-debug/CMakeFiles/edit_cache.dir
