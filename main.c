@@ -50,6 +50,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <assert.h>
 
 #define MAX_WORD_LENGTH 10
@@ -102,9 +103,10 @@ void printQueue(struct Queue *q);
 
 void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount);
 
+extern int errno;
 
 int main() {
-    FILE *fptr;
+    FILE *fptr = NULL;
     int **matrix = NULL;
     int i;
     struct Node *wordList = NULL;
@@ -114,31 +116,58 @@ int main() {
     char *charptr;
     char str[MAX_STDIN_LENGTH];
     int flag = 1;
+    int errnum;
 
     fptr = fopen(stdPath, "r");
-    assert(fptr);
+
+    if (fptr == NULL) {
+        errnum = errno;
+        fprintf(stderr, "Error No: %d\n", errno);
+        perror("Unsuccessful file operation");
+        fprintf(stderr, "Error file opening: %s\n", strerror(errnum));
+        exit(EXIT_FAILURE);
+    }
 
     int lineCount = fileLineCount(fptr);
-    assert(lineCount == KELIME_FILE_LINE_COUNT);
 
     matrix = (int**) malloc(lineCount * sizeof(int*));
-    assert(matrix != NULL);
+
+    if (matrix == NULL) {
+        errnum = errno;
+        fprintf(stderr, "Error No: %d\n", errno);
+        perror("Unsuccessful matrix creation");
+        fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        exit(EXIT_FAILURE);
+    }
 
     for(i = 0; i < lineCount; i++)
         matrix[i] = (int*)calloc(lineCount, sizeof(int));
 
     wordList = (struct Node*) malloc(lineCount * sizeof(struct Node));
-    assert(wordList != NULL);
+
+    if (wordList == NULL) {
+        errnum = errno;
+        fprintf(stderr, "Error No: %d\n", errno);
+        perror("Unsuccessful word list creation");
+        fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        exit(EXIT_FAILURE);
+    }
 
     result = createAdjacencyMatrix(fptr, matrix, wordList, lineCount);
-    assert(result == 1);
-    assert(matrix != NULL);
 
-    assert(getIndex(wordList, "aaaaa", lineCount) == -1);
-
+    if (result == 1) {
+        printf("Adjacency Matrix created successfully\n");
+    } else {
+        errnum = errno;
+        fprintf(stderr, "Error No: %d\n", errno);
+        perror("Unsuccessful adjacency matrix creation");
+        fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        exit(EXIT_FAILURE);
+    }
 
     do {
         printMenu();
+        printf("Enter your choice: ");
         scanf("%s", str);
         choice = strtol(str, &charptr, 10);
 
