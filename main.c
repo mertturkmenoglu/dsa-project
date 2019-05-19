@@ -155,6 +155,12 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    /*
+     * User interaction happens here.
+     * It prints out a menu and user chooses
+     * an action. A handler function will be called with necessary parameters.
+     * It will ask the user for action until user chooses to exit action.
+     */
     do {
         printMenu();
         printf("Enter your choice: ");
@@ -173,41 +179,95 @@ int main() {
 }
 
 
+
+/**
+ * Breadth First Search algorithm implementation
+ *
+ * This function traverses on the given graph and tries to find
+ * if there is a transformation between given two word.
+ *
+ * <p><strong>Note that this implementation is <i>not</i> generic</strong>
+ * It is a specialized BFS implementation for disclosed purposes.
+ *
+ * <p>With given words, function starts to enqueueing nodes to queue. As long as
+ * queue is not empty, it dequeues and adds unvisited neighbour nodes to queue.
+ * If it comes across the searching word, it will return a success value. If it
+ * never happens and queue becomes empty, it will return a failure value.
+ *
+ * @author Mert Turkmenoglu
+ * @see {@code struct Node}
+ * @see {code struct Queue}
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array holds words
+ * @param wordCount is the number of words readed from file
+ * @param startingPoint is the starting node index
+ * @param endingPoint is the ending node index
+ * @return if there is a transformation or not
+ */
 int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
     struct Queue *q = createQueue();
 
+    /*
+     * Start by enqueueing the starting node
+     */
     enqueue(q, wordList[startingPoint]);
     assert(q->front != NULL);
     printQueue(q);
 
     int *visited = (int*) calloc(wordCount, sizeof(int));
+
+    /*
+     * Mark starting point as visited
+     */
     visited[startingPoint] = 1;
 
     int i;
 
+    /*
+     * While queue is not empty, traverse the graph
+     */
     while(q->front != NULL) {
+        /*
+         * Get the first node
+         */
         struct Node v = dequeue(q)->value;
-        printf("\nCurrent node: %s\n", v.word);
         int index = getIndex(wordList, v.word, wordCount);
 
+        printf("\nCurrent node: %s\n", v.word);
+
         for (i = 0; i < wordCount; i++) {
-            // Is it a neighbour?
+            /*
+             * Is it a neighbour?
+             */
             if(matrix[index][i] == 1) {
+                // TODO: Refactor string comparison
                 int j = 0;
                 while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
                     j++;
                 if (j == 5)
                     return 1;
-                // Is it visited?
+
+                /*
+                 * Is it visited? If it is not, enqueue and mark it as visited.
+                 */
                 if (visited[i] != 1) {
                     enqueue(q, wordList[i]);
                     visited[i] = 1;
                 }
             }
         }
+
+        /*
+         * Print current status of the queue
+         */
         printQueue(q);
     }
 
+    /*
+     * If queue becomes empty, there is no transformation between given words.
+     * Return failure value
+     */
     return 0;
 }
 
