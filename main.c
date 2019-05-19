@@ -95,34 +95,76 @@ void printQueue(struct Queue *q);
 // Memory deallocate
 void finalizeQueue(struct Queue *q);
 
-int createAdjacencyMatrix(FILE *fptr, int lineCount);
+int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount);
 
 int connection(char *first, char *second);
 
 int fileLineCount(FILE *fptr);
 
+void printMatrix(int **matrix, struct Node *wordList, int n);
+
 
 int main() {
+    FILE *fptr;
+    int **matrix = NULL;
+    int i;
+    struct Node *wordList = NULL;
+    int result;
 
     // Open word file
     // TODO: Update file path.
-    FILE *fptr = fopen("/home/mert/codes/dsa-project/kelime.txt", "r");
+    fptr = fopen("/home/mert/codes/dsa-project/kelime.txt", "r");
     assert(fptr);
 
     int lineCount = fileLineCount(fptr);
     assert(lineCount == KELIME_FILE_LINE_COUNT);
 
-    int result = createAdjacencyMatrix(fptr, lineCount);
-    assert(result == 0);
+    matrix = (int**) malloc(lineCount * sizeof(int*));
+    assert(matrix != NULL);
+
+    for(i = 0; i < lineCount; i++)
+        matrix[i] = (int*)calloc(lineCount, sizeof(int));
+
+    wordList = (struct Node*) malloc(lineCount * sizeof(struct Node));
+    assert(wordList != NULL);
+
+    result = createAdjacencyMatrix(fptr, matrix, wordList, lineCount);
+    assert(result == 1);
+    assert(matrix != NULL);
 
     // Close word file
     fclose(fptr);
 
-    // TODO: Remove test assertions
-    assert(connection("abcde", "abcde") == 1);
-    assert(connection("abcde", "abcdf") == 1);
-    assert(connection("abcde", "abcxx") == 0);
+
     return 0;
+}
+
+
+void printMatrix(int **matrix, struct Node *wordList, int n) {
+    int i, j;
+
+    printf("\t\t");
+    for(i = 0; i < n; i++) {
+        printf("%d\t", i+1);
+    }
+
+    printf("\n");
+    for(i = 0 ; i < 5 * n; i++) {
+        printf("-");
+    }
+    printf("\n");
+
+    for(i = 0; i < n; i++) {
+        printf("%d|\t\t", i+1);
+        for (j = 0; j < n; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("%d-%s", i+1, wordList[i].word);
+    }
 }
 
 
@@ -139,23 +181,34 @@ int fileLineCount(FILE *fptr) {
         if(tmp == '\n')
             counter++;
     }
+
+    rewind(fptr);
+
     return  counter+1;
 }
 
 
-int createAdjacencyMatrix(FILE *fptr, int lineCount) {
+int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
     char tmp[MAX_WORD_LENGTH];
-    int i = 1;
-    // Read line by line and parse the string
+    int i, j;
+
+    i = 0;
+    // Read line by line, create node and insert into matrix
     while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
-        // TODO: Update this part
         struct Node *structNode = malloc(sizeof(struct Node));
         strcpy(structNode->word, tmp);
-        printf("%d- %s", i++, structNode->word);
+        wordList[i++] = *structNode;
     }
 
-    // TODO: Implement function
-    return 0;
+    // Traverse matrix
+    for (i = 0; i < lineCount; i++) {
+        for (j = 0; j < lineCount; j++) {
+            matrix[i][j] = connection(wordList[i].word, wordList[j].word);
+            matrix[j][i] = matrix[i][j];
+        }
+    }
+
+    return 1;
 }
 
 
@@ -294,11 +347,8 @@ int connection(char *first, char *second) {
     size_t i = 0;
     int counter = 0;
 
-    // printf("%s - %s\n", first, second);
-
     while ((i < len) && (counter < 2)) {
         if (first[i] != second[i]) {
-            // printf("%ld -th letter is different\n", i+1);
             counter++;
         }
         i++;
@@ -306,3 +356,10 @@ int connection(char *first, char *second) {
 
     return (counter >= 2) ? 0 : 1;
 }
+
+/*
+ * Assertions for testing:
+    assert(connection("abcde", "abcde") == 1);
+    assert(connection("abcde", "abcdf") == 1);
+    assert(connection("abcde", "abcxx") == 0);
+ */
