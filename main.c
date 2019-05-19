@@ -15,6 +15,9 @@
  * CLion 2019.1.2
  * Build #CL-191.6707.69, built on April 18, 2019
  *
+ *
+ * stdPath = /home/mert/codes/dsa-project/kelime.txt
+ *
  * @author Mert Turkmenoglu
  */
 
@@ -88,18 +91,24 @@ extern int errno;
 
 int main() {
     FILE *fptr = NULL;
+
     int **matrix = NULL;
-    int i;
     struct Node *wordList = NULL;
-    int result;
-    char *stdPath = "/home/mert/codes/dsa-project/kelime.txt";
-    int choice;
+
     char *charptr;
     char str[MAX_STDIN_LENGTH];
+    char path[MAX_STDIN_LENGTH];
+
+    int i;
+    int result;
+    int choice;
     int flag;
     int errnum;
 
-    fptr = fopen(stdPath, "r");
+    printf("\nEnter word file path: ");
+    scanf("%s", path);
+
+    fptr = fopen(path, "r");
 
     if (fptr == NULL) {
         errnum = errno;
@@ -305,7 +314,7 @@ void printMenu() {
     printf("1- Print Adjacency Matrix\n");
     printf("2- isDifferentOneLetter\n");
     printf("3- isTransformable\n");
-    printf("4- printNeighbours");
+    printf("4- printNeighbours\n");
     printf("0- Exit\n");
     printf("-------------------------\n");
 }
