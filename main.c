@@ -53,7 +53,7 @@
 #include <assert.h>
 
 #define MAX_WORD_LENGTH 10
-#define TEST_FILE_LINE_COUNT 4
+#define MAX_STDIN_LENGTH 255
 #define KELIME_FILE_LINE_COUNT 2415
 
 struct Queue {
@@ -103,6 +103,14 @@ int fileLineCount(FILE *fptr);
 
 void printMatrix(int **matrix, struct Node *wordList, int n);
 
+void printMenu();
+
+void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
+
+void connectionHandler();
+
+void bfsHandler();
+
 
 int main() {
     FILE *fptr;
@@ -110,10 +118,13 @@ int main() {
     int i;
     struct Node *wordList = NULL;
     int result;
+    char *stdPath = "/home/mert/codes/dsa-project/kelime.txt";
+    int choice;
+    char *charptr;
+    char str[MAX_STDIN_LENGTH];
+    int flag = 1;
 
-    // Open word file
-    // TODO: Update file path.
-    fptr = fopen("/home/mert/codes/dsa-project/kelime.txt", "r");
+    fptr = fopen(stdPath, "r");
     assert(fptr);
 
     int lineCount = fileLineCount(fptr);
@@ -132,11 +143,88 @@ int main() {
     assert(result == 1);
     assert(matrix != NULL);
 
-    // Close word file
+
+    do {
+        printMenu();
+        scanf("%s", str);
+        choice = strtol(str, &charptr, 10);
+
+        switch (choice) {
+            case 1:
+                printMatrixHandler(matrix, wordList, lineCount);
+                break;
+            case 2:
+                connectionHandler();
+                break;
+            case 3:
+                bfsHandler();
+                break;
+            case 0:
+                flag = 0;
+                break;
+            default:
+                printf("Invalid input\n");
+        }
+
+    } while(flag == 1);
+
     fclose(fptr);
-
-
+    free(matrix);
+    free(wordList);
+    fptr = NULL;
+    matrix = NULL;
+    wordList = NULL;
     return 0;
+}
+
+
+void printMenu() {
+    printf("1- Print Adjacency Matrix\n");
+    printf("2- isDifferentOneLetter\n");
+    printf("3- isTransformable\n");
+    printf("0- Exit\n");
+    printf("-------------------------\n");
+}
+
+
+void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
+    char *charptr;
+    char str[MAX_STDIN_LENGTH];
+    int tmp;
+
+    do {
+        printf("\nHow many rows do you want to see?\n");
+        scanf("%s", str);
+        tmp = strtol(str, &charptr, 10);
+    } while ((tmp <= 0) || (tmp > lineCount));
+
+    printMatrix(matrix, wordList, tmp);
+}
+
+
+void connectionHandler() {
+    char first[MAX_WORD_LENGTH];
+    char second[MAX_WORD_LENGTH];
+    int result;
+
+    printf("\nEnter your first word: ");
+    scanf("%s", first);
+
+    printf("\nEnter your second word: ");
+    scanf("%s", second);
+
+    result = connection(first, second);
+
+    if (result == 1) {
+        printf("One letter difference\n");
+    } else {
+        printf("More than one letter is different\n");
+    }
+}
+
+
+void bfsHandler() {
+    // TODO: IMPLEMENT
 }
 
 
