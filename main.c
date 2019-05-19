@@ -196,11 +196,11 @@ int main() {
  *
  * @author Mert Turkmenoglu
  * @see {@code struct Node}
- * @see {code struct Queue}
+ * @see {@code struct Queue}
  *
  * @param matrix is the adjacency matrix
  * @param wordList is the array holds words
- * @param wordCount is the number of words readed from file
+ * @param wordCount is the number of words read from file
  * @param startingPoint is the starting node index
  * @param endingPoint is the ending node index
  * @return if there is a transformation or not
@@ -273,23 +273,56 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
 
 
 
+/**
+ * Breadth First Search Handler
+ *
+ * This function takes necessary inputs from user
+ * and handles bfs function calls.
+ *
+ * <p>Call for this function comes after user choosing the transformation action.
+ * After the call, function will ask two string input for user and reads it from
+ * stdin. Then it will call the {@link getIndex} and assign the index values of
+ * strings. Then it will call {@link bfs} and wait for the return value. After bfs
+ * call, it will print the outcome of the function.
+ *
+ * @author Mert Turkmenoglu
+ * @see {@code struct Node}
+ * @see {@code struct Queue}
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array holds words
+ * @param wordCount is the number of words read from file
+ */
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
     struct Node *first = (struct Node*) malloc(sizeof(struct Node));
     struct Node *second = (struct Node*) malloc(sizeof(struct Node));
     int result;
 
+    /*
+     * Read starting and ending strings from user.
+     */
     printf("\nEnter your first word: ");
     scanf("%s", first->word);
 
     printf("\nEnter your second word: ");
     scanf("%s", second->word);
 
-    int s = getIndex(wordList, first->word, wordCount);
-    int e = getIndex(wordList, second->word, wordCount);
-    result = bfs(matrix, wordList, wordCount, s, e);
+    /*
+     * Get the indices of the words.
+     */
+    int start = getIndex(wordList, first->word, wordCount);
+    int end = getIndex(wordList, second->word, wordCount);
 
-    printf("\n\nResult: %d\n\n", result);
+    /*
+     * Get the result and print it.
+     */
+    result = bfs(matrix, wordList, wordCount, start, end);
 
+    if (result == 1) {
+        printf("There is at least one transformation between %s and %s", first->word, second->word);
+    } else {
+        printf("There is no transformation between %s and %s", first->word, second->word);
+    }
 }
 
 
