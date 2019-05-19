@@ -53,6 +53,8 @@
 #include <assert.h>
 
 #define MAX_WORD_LENGTH 10
+#define TEST_FILE_LINE_COUNT 4
+#define KELIME_FILE_LINE_COUNT 2415
 
 struct Queue {
     int front;
@@ -93,7 +95,12 @@ void printQueue(struct Queue *q);
 // Memory deallocate
 void finalizeQueue(struct Queue *q);
 
-int createAdjacencyMatrix(FILE *fptr);
+int createAdjacencyMatrix(FILE *fptr, int lineCount);
+
+int connection(char *first, char *second);
+
+int fileLineCount(FILE *fptr);
+
 
 int main() {
 
@@ -102,16 +109,41 @@ int main() {
     FILE *fptr = fopen("/home/mert/codes/dsa-project/kelime.txt", "r");
     assert(fptr);
 
-    int result = createAdjacencyMatrix(fptr);
-    assert(result == 1);
+    int lineCount = fileLineCount(fptr);
+    assert(lineCount == KELIME_FILE_LINE_COUNT);
+
+    int result = createAdjacencyMatrix(fptr, lineCount);
+    assert(result == 0);
 
     // Close word file
     fclose(fptr);
+
+    // TODO: Remove test assertions
+    assert(connection("abcde", "abcde") == 1);
+    assert(connection("abcde", "abcdf") == 1);
+    assert(connection("abcde", "abcxx") == 0);
     return 0;
 }
 
 
-int createAdjacencyMatrix(FILE *fptr) {
+int fileLineCount(FILE *fptr) {
+    if (fptr == NULL) {
+        return -1;
+    }
+
+    int counter = 0;
+    char tmp;
+
+    while(!feof(fptr)) {
+        tmp = fgetc(fptr);
+        if(tmp == '\n')
+            counter++;
+    }
+    return  counter+1;
+}
+
+
+int createAdjacencyMatrix(FILE *fptr, int lineCount) {
     char tmp[MAX_WORD_LENGTH];
     int i = 1;
     // Read line by line and parse the string
@@ -125,6 +157,7 @@ int createAdjacencyMatrix(FILE *fptr) {
     // TODO: Implement function
     return 0;
 }
+
 
 /*
  * BFS PSEUDO-CODE
@@ -252,4 +285,24 @@ void finalizeQueue(struct Queue *q) {
     free(q->array);
     q->array = NULL;
     q = NULL;
+}
+
+
+
+int connection(char *first, char *second) {
+    size_t len = strlen(first);
+    size_t i = 0;
+    int counter = 0;
+
+    // printf("%s - %s\n", first, second);
+
+    while ((i < len) && (counter < 2)) {
+        if (first[i] != second[i]) {
+            // printf("%ld -th letter is different\n", i+1);
+            counter++;
+        }
+        i++;
+    }
+
+    return (counter >= 2) ? 0 : 1;
 }
