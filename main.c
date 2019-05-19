@@ -12,7 +12,7 @@
  * If you can convert a word to another one with changing one letter on each
  * step, there is a connection between these two words.
  * There is a connection between "prove" and "prose".
- * But there is no connection betwwen "prove" and "wrest"
+ * But there is no connection between "prove" and "wrest"
  *
  * All words are has a length of five.
  * All letters are lowercase.
@@ -48,8 +48,38 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#define MAX_WORD_LENGTH 10
+
+int createAdjacencyMatrix(FILE *fptr);
 
 int main() {
-    printf("Hello, World!\n");
+
+    // Open word file
+    // TODO: Update file path.
+    FILE *fptr = fopen("/home/mert/codes/dsa-project/kelime.txt", "r");
+    assert(fptr);
+
+    int result = createAdjacencyMatrix(fptr);
+    assert(result == 1);
+
+    // Close word file
+    fclose(fptr);
+    return 0;
+}
+
+
+int createAdjacencyMatrix(FILE *fptr) {
+    char tmp[MAX_WORD_LENGTH];
+
+    // Read line by line and parse the string
+    while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
+        // TODO: Update this part
+        printf("%s\n", tmp);
+    }
+
+    // TODO: Implement function
     return 0;
 }
