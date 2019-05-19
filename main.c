@@ -5,7 +5,7 @@
  * if you can convert the first word to second word and if you can,
  * print the path.
  *
- * prove → prose → prese → prest → wrest → weest → geest → guest → guess
+ *
  *
  * You must use graph data structure.
  * Nodes of the graph must be words.
@@ -56,16 +56,18 @@
 #define MAX_STDIN_LENGTH 255
 #define KELIME_FILE_LINE_COUNT 2415
 
-struct Queue {
-    int front;
-    int rear;
-    int size;
-    unsigned int capacity;
-    struct Node *array;
-};
-
 struct Node {
     char word[MAX_WORD_LENGTH];
+};
+
+struct Queue {
+    struct QueueNode *front;
+    struct QueueNode *rear;
+};
+
+struct QueueNode{
+    struct Node value;
+    struct QueueNode *next;
 };
 
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount);
@@ -88,26 +90,17 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
 
 int getIndex(struct Node *wordList,  char str[MAX_WORD_LENGTH], int wordCount);
 
-// Create a Queue instance
-struct Queue *createQueue(unsigned int initCapacity);
+struct QueueNode* newNode(struct Node value);
 
-// Query if Queue is full
-int isQueueFull(struct Queue *q);
+struct Queue *createQueue();
 
-// Query if Queue is empty
-int isQueueEmpty(struct Queue *q);
+void enQueue(struct Queue *q, struct Node value);
 
-// Add item to queue
-int enqueue(struct Queue *q, struct Node item);
+struct QueueNode *deQueue(struct Queue *q);
 
-// Remove item from queue
-int dequeue(struct Queue *q, struct Node *var);
-
-// Print queue to stdout
 void printQueue(struct Queue *q);
 
-// Memory deallocate
-void finalizeQueue(struct Queue *q);
+void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount);
 
 
 int main() {
@@ -141,6 +134,8 @@ int main() {
     assert(result == 1);
     assert(matrix != NULL);
 
+    assert(getIndex(wordList, "aaaaa", lineCount) == -1);
+
 
     do {
         printMenu();
@@ -169,10 +164,20 @@ int main() {
     fclose(fptr);
     free(matrix);
     free(wordList);
-    fptr = NULL;
-    matrix = NULL;
-    wordList = NULL;
+
     return 0;
+}
+
+
+void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
+    int i;
+    int index = getIndex(wordList, str, wordCount);
+
+    for(i = 0; i < wordCount; i++) {
+        if (matrix[index][i] == 1) {
+            printf("%s\n", wordList[i].word);
+        }
+    }
 }
 
 
@@ -193,6 +198,9 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
         for (j = 0; j < lineCount; j++) {
             matrix[i][j] = connection(wordList[i].word, wordList[j].word);
             matrix[j][i] = matrix[i][j];
+            if (i == j) {
+                matrix[i][j] = 0;
+            }
         }
     }
 
@@ -201,7 +209,7 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
 
 
 int connection(char *first, char *second) {
-    size_t len = strlen(first);
+    size_t len = 5;
     size_t i = 0;
     int counter = 0;
 
@@ -302,7 +310,7 @@ void connectionHandler() {
     result = connection(first, second);
 
     if (result == 1) {
-        printf("One letter difference\n");
+        printf("Same or one letter difference\n");
     } else {
         printf("More than one letter is different\n");
     }
@@ -330,7 +338,40 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
 
 
 int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
-    // TODO: Implement
+    struct Queue *q = createQueue();
+
+    enQueue(q, wordList[startingPoint]);
+    assert(q->front != NULL);
+    printQueue(q);
+
+    int *visited = (int*) calloc(wordCount, sizeof(int));
+    visited[startingPoint] = 1;
+
+    int i;
+
+    while(q->front != NULL) {
+        struct Node v = deQueue(q)->value;
+        printf("\nCurrent node: %s\n", v.word);
+        int index = getIndex(wordList, v.word, wordCount);
+
+        for (i = 0; i < wordCount; i++) {
+            // Komşu mu?
+            if(matrix[index][i] == 1) {
+                int j = 0;
+                while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
+                    j++;
+                if (j == 5)
+                    return 1;
+                // ziyaret edilmiş mi?
+                if (visited[i] != 1) {
+                    enQueue(q, wordList[i]);
+                    visited[i] = 1;
+                }
+            }
+        }
+        printQueue(q);
+    }
+
     return 0;
 }
 
@@ -352,90 +393,60 @@ int getIndex(struct Node *wordList,  char str[MAX_WORD_LENGTH], int wordCount) {
 }
 
 
-/**
- * Create a queue with
- * @param initCapacity
- * @return a pointer to queue
- */
-struct Queue *createQueue(unsigned int initCapacity) {
-    struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
-    q->capacity = initCapacity;
-    q->front = 0;
-    q->size = 0;
-    q->rear = q->capacity - 1;
-    q->array = (struct Node *) malloc(q->capacity * sizeof(struct Node));
+struct QueueNode* newNode(struct Node value) {
+    struct QueueNode *temp = (struct QueueNode*)malloc(sizeof(struct QueueNode));
+
+    temp->value = value;
+    temp->next = NULL;
+
+    return temp;
+}
+
+
+struct Queue *createQueue() {
+    struct Queue *q = (struct Queue*)malloc(sizeof(struct Queue));
+
+    q->front = NULL;
+    q->rear = NULL;
+
     return q;
 }
 
 
-/**
- * If size of the queue is equal to its capacity(max)
- * then return 1 (true) else 0 (false)
- */
-int isQueueFull(struct Queue *q) {
-    return (q->size == q->capacity);
-}
+void enQueue(struct Queue *q, struct Node value) {
+    struct QueueNode *temp = newNode(value);
 
-
-/**
- * If size of the queue is equal to 0, then there is no
- * element in the queue return 1 (true) else 0 (false)
- */
-int isQueueEmpty(struct Queue *q) {
-    return (q->size == 0);
-}
-
-
-/**
- * Add item to queue
- */
-int enqueue(struct Queue *q, struct Node item) {
-    if (isQueueFull(q))
-        return 0;
-
-    q->rear = (q->rear + 1) % q->capacity;
-    q->array[q->rear] = item;
-    q->size++;
-
-    return 1;
-}
-
-
-/**
- * Remove item from queue
- * @param var is the pointer of the variable that will
- * hold the removed item
- * @return 1(true) if operation is successfull
- * else 0(false).
- */
-int dequeue(struct Queue *q, struct Node *var) {
-    if (isQueueEmpty(q))
-        return 0;
-
-    *var = q->array[q->front];
-    q->front = (q->front + 1) % q->capacity;
-    q->size--;
-
-    return 1;
-}
-
-
-/**
- * Print the queue to stdout
- */
-void printQueue(struct Queue *q) {
-    int i;
-    for (i = q->front; i <= q->rear; i++) {
-        printf("%s\t", q->array[i].word);
+    if (q->rear == NULL) {
+        q->front = temp;
+        q->rear = temp;
+        return;
     }
-    printf("\n");
+
+    q->rear->next = temp;
+    q->rear = temp;
 }
 
 
-/**
- * Deallocate memory
- */
-void finalizeQueue(struct Queue *q) {
-    free(q->array);
-    q->array = NULL;
+struct QueueNode *deQueue(struct Queue *q) {
+    if (q->front == NULL)
+        return NULL;
+
+    struct QueueNode *temp = q->front;
+    q->front = q->front->next;
+
+    if (q->front == NULL)
+        q->rear = NULL;
+
+    return temp;
+}
+
+void printQueue(struct Queue *q) {
+    struct QueueNode *iter = q->front;
+
+    while(iter != NULL) {
+        printf("%s\n", iter->value.word);
+        iter = iter->next;
+    }
+
+    printf("----------\n");
 }
