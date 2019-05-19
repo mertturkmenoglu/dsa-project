@@ -83,3 +83,17 @@ int createAdjacencyMatrix(FILE *fptr) {
     // TODO: Implement function
     return 0;
 }
+
+/*
+ * BFS PSEUDO-CODE
+ *
+ * def BFS(G, s):
+ *      enqueue(s)
+ *      mark s as valid
+ *      while (queue is not empty):
+ *          v = dequeue()
+ *          for all neighbors of w of v in graph G:
+ *              if w is not visited:
+ *                  enqueue(w)
+ *                  mark w as visited
+ */
