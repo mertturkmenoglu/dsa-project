@@ -61,39 +61,12 @@ struct Queue {
     int rear;
     int size;
     unsigned int capacity;
-    int *array;
+    struct Node *array;
 };
 
 struct Node {
     char word[MAX_WORD_LENGTH];
 };
-
-// Create a Queue instance
-struct Queue *createQueue(unsigned int initCapacity);
-
-// Query if Queue is full
-int isQueueFull(struct Queue *q);
-
-// Query if Queue is empty
-int isQueueEmpty(struct Queue *q);
-
-// Add item to queue
-int enqueue(struct Queue *q, int item);
-
-// Remove item from queue
-int dequeue(struct Queue *q, int *var);
-
-// Get the front item
-int getFront(struct Queue *q, int *var);
-
-// Get the rear item
-int getRear(struct Queue *q, int *var);
-
-// Print queue to stdout
-void printQueue(struct Queue *q);
-
-// Memory deallocate
-void finalizeQueue(struct Queue *q);
 
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount);
 
@@ -110,6 +83,27 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
 void connectionHandler();
 
 void bfsHandler();
+
+// Create a Queue instance
+struct Queue *createQueue(unsigned int initCapacity);
+
+// Query if Queue is full
+int isQueueFull(struct Queue *q);
+
+// Query if Queue is empty
+int isQueueEmpty(struct Queue *q);
+
+// Add item to queue
+int enqueue(struct Queue *q, struct Node item);
+
+// Remove item from queue
+int dequeue(struct Queue *q, struct Node *var);
+
+// Print queue to stdout
+void printQueue(struct Queue *q);
+
+// Memory deallocate
+void finalizeQueue(struct Queue *q);
 
 
 int main() {
@@ -178,6 +172,94 @@ int main() {
 }
 
 
+int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
+    char tmp[MAX_WORD_LENGTH];
+    int i, j;
+
+    i = 0;
+    // Read line by line, create node and insert into matrix
+    while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
+        struct Node *structNode = malloc(sizeof(struct Node));
+        strcpy(structNode->word, tmp);
+        wordList[i++] = *structNode;
+    }
+
+    // Traverse matrix
+    for (i = 0; i < lineCount; i++) {
+        for (j = 0; j < lineCount; j++) {
+            matrix[i][j] = connection(wordList[i].word, wordList[j].word);
+            matrix[j][i] = matrix[i][j];
+        }
+    }
+
+    return 1;
+}
+
+
+int connection(char *first, char *second) {
+    size_t len = strlen(first);
+    size_t i = 0;
+    int counter = 0;
+
+    while ((i < len) && (counter < 2)) {
+        if (first[i] != second[i]) {
+            counter++;
+        }
+        i++;
+    }
+
+    return (counter >= 2) ? 0 : 1;
+}
+
+
+int fileLineCount(FILE *fptr) {
+    if (fptr == NULL) {
+        return -1;
+    }
+
+    int counter = 0;
+    char tmp;
+
+    while(!feof(fptr)) {
+        tmp = fgetc(fptr);
+        if(tmp == '\n')
+            counter++;
+    }
+
+    rewind(fptr);
+
+    return  counter+1;
+}
+
+
+void printMatrix(int **matrix, struct Node *wordList, int n) {
+    int i, j;
+
+    printf("\t\t");
+    for(i = 0; i < n; i++) {
+        printf("%d\t", i+1);
+    }
+
+    printf("\n");
+    for(i = 0 ; i < 5 * n; i++) {
+        printf("-");
+    }
+    printf("\n");
+
+    for(i = 0; i < n; i++) {
+        printf("%d|\t\t", i+1);
+        for (j = 0; j < n; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("%d-%s", i+1, wordList[i].word);
+    }
+}
+
+
 void printMenu() {
     printf("1- Print Adjacency Matrix\n");
     printf("2- isDifferentOneLetter\n");
@@ -228,78 +310,6 @@ void bfsHandler() {
 }
 
 
-void printMatrix(int **matrix, struct Node *wordList, int n) {
-    int i, j;
-
-    printf("\t\t");
-    for(i = 0; i < n; i++) {
-        printf("%d\t", i+1);
-    }
-
-    printf("\n");
-    for(i = 0 ; i < 5 * n; i++) {
-        printf("-");
-    }
-    printf("\n");
-
-    for(i = 0; i < n; i++) {
-        printf("%d|\t\t", i+1);
-        for (j = 0; j < n; j++) {
-            printf("%d\t", matrix[i][j]);
-        }
-        printf("\n");
-    }
-
-    for (i = 0; i < n; i++) {
-        printf("%d-%s", i+1, wordList[i].word);
-    }
-}
-
-
-int fileLineCount(FILE *fptr) {
-    if (fptr == NULL) {
-        return -1;
-    }
-
-    int counter = 0;
-    char tmp;
-
-    while(!feof(fptr)) {
-        tmp = fgetc(fptr);
-        if(tmp == '\n')
-            counter++;
-    }
-
-    rewind(fptr);
-
-    return  counter+1;
-}
-
-
-int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
-    char tmp[MAX_WORD_LENGTH];
-    int i, j;
-
-    i = 0;
-    // Read line by line, create node and insert into matrix
-    while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
-        struct Node *structNode = malloc(sizeof(struct Node));
-        strcpy(structNode->word, tmp);
-        wordList[i++] = *structNode;
-    }
-
-    // Traverse matrix
-    for (i = 0; i < lineCount; i++) {
-        for (j = 0; j < lineCount; j++) {
-            matrix[i][j] = connection(wordList[i].word, wordList[j].word);
-            matrix[j][i] = matrix[i][j];
-        }
-    }
-
-    return 1;
-}
-
-
 /*
  * BFS PSEUDO-CODE
  *
@@ -326,7 +336,7 @@ struct Queue *createQueue(unsigned int initCapacity) {
     q->front = 0;
     q->size = 0;
     q->rear = q->capacity - 1;
-    q->array = (int *) malloc(q->capacity * sizeof(int));
+    q->array = (struct Node *) malloc(q->capacity * sizeof(struct Node));
     return q;
 }
 
@@ -352,12 +362,14 @@ int isQueueEmpty(struct Queue *q) {
 /**
  * Add item to queue
  */
-int enqueue(struct Queue *q, int item) {
+int enqueue(struct Queue *q, struct Node item) {
     if (isQueueFull(q))
         return 0;
+
     q->rear = (q->rear + 1) % q->capacity;
     q->array[q->rear] = item;
     q->size++;
+
     return 1;
 }
 
@@ -369,40 +381,14 @@ int enqueue(struct Queue *q, int item) {
  * @return 1(true) if operation is successfull
  * else 0(false).
  */
-int dequeue(struct Queue *q, int *var) {
+int dequeue(struct Queue *q, struct Node *var) {
     if (isQueueEmpty(q))
         return 0;
+
     *var = q->array[q->front];
     q->front = (q->front + 1) % q->capacity;
     q->size--;
-    return 1;
-}
 
-
-/**
- * Get the front item of the queue and assign it to
- * @param var
- * @return 1(true) if operation is successfull
- * else 0(false).
- */
-int getFront(struct Queue *q, int *var) {
-    if (isQueueEmpty(q))
-        return 0;
-    *var = q->array[q->front];
-    return 1;
-}
-
-
-/**
- * Get the rear item of the queue and assign it to
- * @param var
- * @return 1(true) if operation is successfull
- * else 0(false).
- */
-int getRear(struct Queue *q, int *var) {
-    if (isQueueEmpty(q))
-        return 0;
-    *var = q->array[q->rear];
     return 1;
 }
 
@@ -413,7 +399,7 @@ int getRear(struct Queue *q, int *var) {
 void printQueue(struct Queue *q) {
     int i;
     for (i = q->front; i <= q->rear; i++) {
-        printf("%d\t", q->array[i]);
+        printf("%s\t", q->array[i].word);
     }
     printf("\n");
 }
@@ -425,29 +411,4 @@ void printQueue(struct Queue *q) {
 void finalizeQueue(struct Queue *q) {
     free(q->array);
     q->array = NULL;
-    q = NULL;
 }
-
-
-
-int connection(char *first, char *second) {
-    size_t len = strlen(first);
-    size_t i = 0;
-    int counter = 0;
-
-    while ((i < len) && (counter < 2)) {
-        if (first[i] != second[i]) {
-            counter++;
-        }
-        i++;
-    }
-
-    return (counter >= 2) ? 0 : 1;
-}
-
-/*
- * Assertions for testing:
-    assert(connection("abcde", "abcde") == 1);
-    assert(connection("abcde", "abcdf") == 1);
-    assert(connection("abcde", "abcxx") == 0);
- */

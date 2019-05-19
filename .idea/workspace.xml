@@ -12,10 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c1e3b1-bb0a-4071-9a8f-237b9fc1c649" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/mert.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/dsa_project" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/dsa_project" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -34,10 +30,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="514">
-              <caret line="55" column="28" selection-start-line="55" selection-start-column="28" selection-end-line="55" selection-end-column="28" />
+            <state relative-caret-position="9333">
+              <caret line="412" column="20" selection-start-line="412" selection-start-column="20" selection-end-line="412" selection-end-column="20" />
               <folding>
                 <element signature="e#2066#2084#0" expanded="true" />
+                <element signature="e#4601#4684#0" />
+                <element signature="e#4983#5083#0" />
+                <element signature="e#5160#5278#0" />
+                <element signature="e#5346#5374#0" />
+                <element signature="e#5564#5742#0" />
+                <element signature="e#6479#6515#0" />
+                <element signature="e#6671#6699#0" />
               </folding>
             </state>
           </provider>
@@ -126,12 +129,12 @@
       <option name="presentableId" value="Default" />
       <updated>1557810616814</updated>
       <workItem from="1557810618035" duration="692000" />
-      <workItem from="1558257240700" duration="13549000" />
+      <workItem from="1558257240700" duration="14513000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14241000" />
+    <option name="totallyTimeSpent" value="15205000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
@@ -196,10 +199,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="514">
-          <caret line="55" column="28" selection-start-line="55" selection-start-column="28" selection-end-line="55" selection-end-column="28" />
+        <state relative-caret-position="9333">
+          <caret line="412" column="20" selection-start-line="412" selection-start-column="20" selection-end-line="412" selection-end-column="20" />
           <folding>
             <element signature="e#2066#2084#0" expanded="true" />
+            <element signature="e#4601#4684#0" />
+            <element signature="e#4983#5083#0" />
+            <element signature="e#5160#5278#0" />
+            <element signature="e#5346#5374#0" />
+            <element signature="e#5564#5742#0" />
+            <element signature="e#6479#6515#0" />
+            <element signature="e#6671#6699#0" />
           </folding>
         </state>
       </provider>
