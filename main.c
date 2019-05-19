@@ -49,6 +49,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #define MAX_WORD_LENGTH 10
@@ -59,6 +60,10 @@ struct Queue {
     int size;
     unsigned int capacity;
     int *array;
+};
+
+struct Node {
+    char word[MAX_WORD_LENGTH];
 };
 
 // Create a Queue instance
@@ -108,11 +113,13 @@ int main() {
 
 int createAdjacencyMatrix(FILE *fptr) {
     char tmp[MAX_WORD_LENGTH];
-
+    int i = 1;
     // Read line by line and parse the string
     while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
         // TODO: Update this part
-        printf("%s\n", tmp);
+        struct Node *structNode = malloc(sizeof(struct Node));
+        strcpy(structNode->word, tmp);
+        printf("%d- %s", i++, structNode->word);
     }
 
     // TODO: Implement function
