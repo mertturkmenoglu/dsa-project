@@ -82,7 +82,11 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
 
 void connectionHandler();
 
-void bfsHandler();
+void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
+
+int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
+
+int getIndex(struct Node *wordList,  char str[MAX_WORD_LENGTH], int wordCount);
 
 // Create a Queue instance
 struct Queue *createQueue(unsigned int initCapacity);
@@ -151,7 +155,7 @@ int main() {
                 connectionHandler();
                 break;
             case 3:
-                bfsHandler();
+                bfsHandler(matrix, wordList, lineCount);
                 break;
             case 0:
                 flag = 0;
@@ -305,24 +309,47 @@ void connectionHandler() {
 }
 
 
-void bfsHandler() {
-    // TODO: IMPLEMENT
+void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
+    struct Node *first = (struct Node*) malloc(sizeof(struct Node));
+    struct Node *second = (struct Node*) malloc(sizeof(struct Node));
+    int result;
+
+    printf("\nEnter your first word: ");
+    scanf("%s", first->word);
+
+    printf("\nEnter your second word: ");
+    scanf("%s", second->word);
+
+    int s = getIndex(wordList, first->word, wordCount);
+    int e = getIndex(wordList, second->word, wordCount);
+    result = bfs(matrix, wordList, wordCount, s, e);
+
+    printf("\n\nResult: %d\n\n", result);
+
 }
 
 
-/*
- * BFS PSEUDO-CODE
- *
- * def BFS(G, s):
- *      enqueue(s)
- *      mark s as valid
- *      while (queue is not empty):
- *          v = dequeue()
- *          for all neighbors of w of v in graph G:
- *              if w is not visited:
- *                  enqueue(w)
- *                  mark w as visited
- */
+int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+    // TODO: Implement
+    return 0;
+}
+
+
+int getIndex(struct Node *wordList,  char str[MAX_WORD_LENGTH], int wordCount) {
+    int i = 0;
+    char tmp[MAX_WORD_LENGTH];
+    while (i < wordCount) {
+        strcpy(tmp, wordList[i].word);
+        int j = 0;
+        while ((j < 5) && (tmp[j] == str[j]))
+            j++;
+        if (j == 5)
+            return i;
+        i++;
+    }
+
+    return -1;
+}
 
 
 /**
