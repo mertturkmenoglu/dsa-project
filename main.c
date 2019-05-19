@@ -53,6 +53,41 @@
 
 #define MAX_WORD_LENGTH 10
 
+struct Queue {
+    int front;
+    int rear;
+    int size;
+    unsigned int capacity;
+    int *array;
+};
+
+// Create a Queue instance
+struct Queue *createQueue(unsigned int initCapacity);
+
+// Query if Queue is full
+int isQueueFull(struct Queue *q);
+
+// Query if Queue is empty
+int isQueueEmpty(struct Queue *q);
+
+// Add item to queue
+int enqueue(struct Queue *q, int item);
+
+// Remove item from queue
+int dequeue(struct Queue *q, int *var);
+
+// Get the front item
+int getFront(struct Queue *q, int *var);
+
+// Get the rear item
+int getRear(struct Queue *q, int *var);
+
+// Print queue to stdout
+void printQueue(struct Queue *q);
+
+// Memory deallocate
+void finalizeQueue(struct Queue *q);
+
 int createAdjacencyMatrix(FILE *fptr);
 
 int main() {
@@ -97,3 +132,117 @@ int createAdjacencyMatrix(FILE *fptr) {
  *                  enqueue(w)
  *                  mark w as visited
  */
+
+
+/**
+ * Create a queue with
+ * @param initCapacity
+ * @return a pointer to queue
+ */
+struct Queue *createQueue(unsigned int initCapacity) {
+    struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
+    q->capacity = initCapacity;
+    q->front = 0;
+    q->size = 0;
+    q->rear = q->capacity - 1;
+    q->array = (int *) malloc(q->capacity * sizeof(int));
+    return q;
+}
+
+
+/**
+ * If size of the queue is equal to its capacity(max)
+ * then return 1 (true) else 0 (false)
+ */
+int isQueueFull(struct Queue *q) {
+    return (q->size == q->capacity);
+}
+
+
+/**
+ * If size of the queue is equal to 0, then there is no
+ * element in the queue return 1 (true) else 0 (false)
+ */
+int isQueueEmpty(struct Queue *q) {
+    return (q->size == 0);
+}
+
+
+/**
+ * Add item to queue
+ */
+int enqueue(struct Queue *q, int item) {
+    if (isQueueFull(q))
+        return 0;
+    q->rear = (q->rear + 1) % q->capacity;
+    q->array[q->rear] = item;
+    q->size++;
+    return 1;
+}
+
+
+/**
+ * Remove item from queue
+ * @param var is the pointer of the variable that will
+ * hold the removed item
+ * @return 1(true) if operation is successfull
+ * else 0(false).
+ */
+int dequeue(struct Queue *q, int *var) {
+    if (isQueueEmpty(q))
+        return 0;
+    *var = q->array[q->front];
+    q->front = (q->front + 1) % q->capacity;
+    q->size--;
+    return 1;
+}
+
+
+/**
+ * Get the front item of the queue and assign it to
+ * @param var
+ * @return 1(true) if operation is successfull
+ * else 0(false).
+ */
+int getFront(struct Queue *q, int *var) {
+    if (isQueueEmpty(q))
+        return 0;
+    *var = q->array[q->front];
+    return 1;
+}
+
+
+/**
+ * Get the rear item of the queue and assign it to
+ * @param var
+ * @return 1(true) if operation is successfull
+ * else 0(false).
+ */
+int getRear(struct Queue *q, int *var) {
+    if (isQueueEmpty(q))
+        return 0;
+    *var = q->array[q->rear];
+    return 1;
+}
+
+
+/**
+ * Print the queue to stdout
+ */
+void printQueue(struct Queue *q) {
+    int i;
+    for (i = q->front; i <= q->rear; i++) {
+        printf("%d\t", q->array[i]);
+    }
+    printf("\n");
+}
+
+
+/**
+ * Deallocate memory
+ */
+void finalizeQueue(struct Queue *q) {
+    free(q->array);
+    q->array = NULL;
+    q = NULL;
+}
