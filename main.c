@@ -173,50 +173,65 @@ int main() {
 }
 
 
-void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
-    char str[MAX_WORD_LENGTH];
+int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+    struct Queue *q = createQueue();
 
-    printf("\nEnter your word: ");
-    scanf("%s", str);
+    enqueue(q, wordList[startingPoint]);
+    assert(q->front != NULL);
+    printQueue(q);
 
-    printNeighbours(matrix, wordList, str, lineCount);
-}
+    int *visited = (int*) calloc(wordCount, sizeof(int));
+    visited[startingPoint] = 1;
 
-
-int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount) {
-    switch (choice) {
-        case 1:
-            printMatrixHandler(matrix, wordList, lineCount);
-            break;
-        case 2:
-            connectionHandler();
-            break;
-        case 3:
-            bfsHandler(matrix, wordList, lineCount);
-            break;
-        case 4:
-            printNeighboursHandler(matrix, wordList, lineCount);
-            break;
-        case 0:
-            break;
-        default:
-            printf("Invalid input\n");
-    }
-
-    return (choice == 0) ? 0 : 1;
-}
-
-
-void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
     int i;
-    int index = getIndex(wordList, str, wordCount);
 
-    for(i = 0; i < wordCount; i++) {
-        if (matrix[index][i] == 1) {
-            printf("%s\n", wordList[i].word);
+    while(q->front != NULL) {
+        struct Node v = dequeue(q)->value;
+        printf("\nCurrent node: %s\n", v.word);
+        int index = getIndex(wordList, v.word, wordCount);
+
+        for (i = 0; i < wordCount; i++) {
+            // Is it a neighbour?
+            if(matrix[index][i] == 1) {
+                int j = 0;
+                while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
+                    j++;
+                if (j == 5)
+                    return 1;
+                // Is it visited?
+                if (visited[i] != 1) {
+                    enqueue(q, wordList[i]);
+                    visited[i] = 1;
+                }
+            }
         }
+        printQueue(q);
     }
+
+    return 0;
 }
+
+
+
+void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
+    struct Node *first = (struct Node*) malloc(sizeof(struct Node));
+    struct Node *second = (struct Node*) malloc(sizeof(struct Node));
+    int result;
+
+    printf("\nEnter your first word: ");
+    scanf("%s", first->word);
+
+    printf("\nEnter your second word: ");
+    scanf("%s", second->word);
+
+    int s = getIndex(wordList, first->word, wordCount);
+    int e = getIndex(wordList, second->word, wordCount);
+    result = bfs(matrix, wordList, wordCount, s, e);
+
+    printf("\n\nResult: %d\n\n", result);
+
+}
+
 
 
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
@@ -246,6 +261,32 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
 }
 
 
+
+int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount) {
+    switch (choice) {
+        case 1:
+            printMatrixHandler(matrix, wordList, lineCount);
+            break;
+        case 2:
+            connectionHandler();
+            break;
+        case 3:
+            bfsHandler(matrix, wordList, lineCount);
+            break;
+        case 4:
+            printNeighboursHandler(matrix, wordList, lineCount);
+            break;
+        case 0:
+            break;
+        default:
+            printf("Invalid input\n");
+    }
+
+    return (choice == 0) ? 0 : 1;
+}
+
+
+
 int connection(const char *first, const char *second) {
     size_t len = 5;
     size_t i = 0;
@@ -259,6 +300,28 @@ int connection(const char *first, const char *second) {
     }
 
     return (counter >= 2) ? 0 : 1;
+}
+
+
+
+void connectionHandler() {
+    char first[MAX_WORD_LENGTH];
+    char second[MAX_WORD_LENGTH];
+    int result;
+
+    printf("\nEnter your first word: ");
+    scanf("%s", first);
+
+    printf("\nEnter your second word: ");
+    scanf("%s", second);
+
+    result = connection(first, second);
+
+    if (result == 1) {
+        printf("Same or one letter difference\n");
+    } else {
+        printf("More than one letter is different\n");
+    }
 }
 
 
@@ -279,6 +342,23 @@ int fileLineCount(FILE *fptr) {
     rewind(fptr);
 
     return  counter+1;
+}
+
+
+int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
+    int i = 0;
+    char tmp[MAX_WORD_LENGTH];
+    while (i < wordCount) {
+        strcpy(tmp, wordList[i].word);
+        int j = 0;
+        while ((j < 5) && (tmp[j] == str[j]))
+            j++;
+        if (j == 5)
+            return i;
+        i++;
+    }
+
+    return -1;
 }
 
 
@@ -320,6 +400,7 @@ void printMenu() {
 }
 
 
+
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
     char *charptr;
     char str[MAX_STDIN_LENGTH];
@@ -332,103 +413,6 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
     } while ((tmp <= 0) || (tmp > lineCount));
 
     printMatrix(matrix, wordList, tmp);
-}
-
-
-void connectionHandler() {
-    char first[MAX_WORD_LENGTH];
-    char second[MAX_WORD_LENGTH];
-    int result;
-
-    printf("\nEnter your first word: ");
-    scanf("%s", first);
-
-    printf("\nEnter your second word: ");
-    scanf("%s", second);
-
-    result = connection(first, second);
-
-    if (result == 1) {
-        printf("Same or one letter difference\n");
-    } else {
-        printf("More than one letter is different\n");
-    }
-}
-
-
-void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
-    struct Node *first = (struct Node*) malloc(sizeof(struct Node));
-    struct Node *second = (struct Node*) malloc(sizeof(struct Node));
-    int result;
-
-    printf("\nEnter your first word: ");
-    scanf("%s", first->word);
-
-    printf("\nEnter your second word: ");
-    scanf("%s", second->word);
-
-    int s = getIndex(wordList, first->word, wordCount);
-    int e = getIndex(wordList, second->word, wordCount);
-    result = bfs(matrix, wordList, wordCount, s, e);
-
-    printf("\n\nResult: %d\n\n", result);
-
-}
-
-
-int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
-    struct Queue *q = createQueue();
-
-    enqueue(q, wordList[startingPoint]);
-    assert(q->front != NULL);
-    printQueue(q);
-
-    int *visited = (int*) calloc(wordCount, sizeof(int));
-    visited[startingPoint] = 1;
-
-    int i;
-
-    while(q->front != NULL) {
-        struct Node v = dequeue(q)->value;
-        printf("\nCurrent node: %s\n", v.word);
-        int index = getIndex(wordList, v.word, wordCount);
-
-        for (i = 0; i < wordCount; i++) {
-            // Is it a neighbour?
-            if(matrix[index][i] == 1) {
-                int j = 0;
-                while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
-                    j++;
-                if (j == 5)
-                    return 1;
-                // Is it visited?
-                if (visited[i] != 1) {
-                    enqueue(q, wordList[i]);
-                    visited[i] = 1;
-                }
-            }
-        }
-        printQueue(q);
-    }
-
-    return 0;
-}
-
-
-int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
-    int i = 0;
-    char tmp[MAX_WORD_LENGTH];
-    while (i < wordCount) {
-        strcpy(tmp, wordList[i].word);
-        int j = 0;
-        while ((j < 5) && (tmp[j] == str[j]))
-            j++;
-        if (j == 5)
-            return i;
-        i++;
-    }
-
-    return -1;
 }
 
 
@@ -488,4 +472,26 @@ void printQueue(struct Queue *q) {
     }
 
     printf("----------\n");
+}
+
+
+void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
+    char str[MAX_WORD_LENGTH];
+
+    printf("\nEnter your word: ");
+    scanf("%s", str);
+
+    printNeighbours(matrix, wordList, str, lineCount);
+}
+
+
+void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
+    int i;
+    int index = getIndex(wordList, str, wordCount);
+
+    for(i = 0; i < wordCount; i++) {
+        if (matrix[index][i] == 1) {
+            printf("%s\n", wordList[i].word);
+        }
+    }
 }
