@@ -326,29 +326,85 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
 
 
 
+/**
+ * Create Adjacency Matrix
+ *
+ * <p>This function reads lines a.k.a words from the given file and wraps them in a
+ * structure. Then assigns them to given wordList array. After that, it browses
+ * the matrix and assigns 1 or 0 to given point. 1 means that relative row
+ * and column words can transform into each other with just step a.k.a they are
+ * neighbours in the graph. 0 means, you cannot traverse the graph from given node
+ * to the other node without visiting at least one other node. In other words, they
+ * are not neighbours. Graph does not contain any self return links. So elements of
+ * the main diagonal of the matrix are always zero. Otherwise, other operations may
+ * be performed unnecessarily.
+ *
+ * <p>Call for this function comes after user choosing the transformation action.
+ * After the call, function will ask two string input for user and reads it from
+ * stdin. Then it will call the {@link getIndex} and assign the index values of
+ * strings. Then it will call {@link bfs} and wait for the return value. After bfs
+ * call, it will print the outcome of the function.
+ *
+ * <p>{@code FILE* fptr}, {@code int **matrix} and {@code struct Node *wordList} are
+ * must be initialized. They cannot be NULL. So before this function call, file stream
+ * must be opened, lines in the file must be counted, appropriate size of matrix and
+ * wordList must be allocated on the memory.
+ *
+ * <p>With given FILE pointer, function starts to read lines from the file. File
+ * must be in the correct format. There must be one and only one word on the each
+ * line. It creates an abstraction form for the word and holds the structure in an
+ * array. It reads the file until the end. Then for all possibilities of
+ * word pairs, it browses the matrix and find if they are neighbours.
+ * If they are, marks them as one, otherwise zero. On successful operations,
+ * function should return 1.
+ *
+ * @author Mert Turkmenoglu
+ * 
+ * @see {@code struct Node}
+ *
+ * @param fptr is the not NULL file pointer to the word list file stream
+ * @param matrix is the allocated adjacency matrix pointer(not NULL)
+ * @param wordList is the allocated array of struct Node's(not NULL)
+ * @param lineCount is word/line count of the word file
+ * @return successful or not
+ */
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
     char tmp[MAX_WORD_LENGTH];
-    int i, j;
+    int i = 0;
+    int j = 0;
 
-    i = 0;
-    // Read line by line, create node and insert into matrix
+    /*
+     * Read until you reach the end of the file
+     */
     while (fgets(tmp, MAX_WORD_LENGTH - 1, fptr) != NULL) {
+        /*
+         * Create an abstraction structure and assign the string
+         * to the field. Then add it to the wordList array.
+         */
         struct Node *structNode = malloc(sizeof(struct Node));
         strcpy(structNode->word, tmp);
         wordList[i++] = *structNode;
     }
 
-    // Traverse matrix
+    /*
+     * Browse the matrix and assign the connection value
+     */
     for (i = 0; i < lineCount; i++) {
         for (j = 0; j < lineCount; j++) {
             matrix[i][j] = connection(wordList[i].word, wordList[j].word);
             matrix[j][i] = matrix[i][j];
+
+            /*
+             * If it is a main diagonal element, mark it as zero because
+             * there is no self-return links in the graph.
+             */
             if (i == j) {
                 matrix[i][j] = 0;
             }
         }
     }
 
+    /* Return a success value */
     return 1;
 }
 
