@@ -223,6 +223,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
     visited[startingPoint] = 1;
 
     int i;
+    int counter = 0;
 
     /*
      * While queue is not empty, traverse the graph
@@ -232,6 +233,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
          * Get the first node
          */
         struct Node v = dequeue(q)->value;
+        counter++;
         int index = getIndex(wordList, v.word, wordCount);
 
         printf("\nCurrent node: %s\n", v.word);
@@ -246,7 +248,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
                 while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
                     j++;
                 if (j == 5)
-                    return 1;
+                    return counter;
 
                 /*
                  * Is it visited? If it is not, enqueue and mark it as visited.
@@ -257,11 +259,6 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
                 }
             }
         }
-
-        /*
-         * Print current status of the queue
-         */
-        printQueue(q);
     }
 
     /*
@@ -318,11 +315,13 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
      */
     result = bfs(matrix, wordList, wordCount, start, end);
 
-    if (result == 1) {
-        printf("There is at least one transformation between %s and %s", first->word, second->word);
+    if (result == 0) {
+        printf("There is no transformation between %s and %s\n", first->word, second->word);
     } else {
-        printf("There is no transformation between %s and %s", first->word, second->word);
+        printf("There is at least one transformation between %s and %s: %d\n", first->word, second->word, result);
     }
+
+    printf("----------------------\n\n");
 }
 
 
