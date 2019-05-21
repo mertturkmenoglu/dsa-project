@@ -60,12 +60,14 @@
  * @abstract a wrapping model for strings
  *
  * @discussion An abstraction level for expressing graph. An instance
- * of the struct holds the word for given node.
+ * of the struct holds the word and the level for given node.
  *
  * @field word is the string for holding information.
+ * @level is the distance to the relative root at given time
  */
 struct Node {
     char word[MAX_WORD_LENGTH];
+    int level;
 };
 
 
@@ -289,6 +291,11 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
         return -1;
     }
 
+    int i;
+
+    for (i = 0; i < wordCount; i++)
+        wordList[i].level = 0;
+
     struct Queue *q = createQueue();
 
     /*
@@ -305,9 +312,6 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
      */
     visited[startingPoint] = 1;
 
-    int i;
-    int counter = 0;
-
     /*
      * While queue is not empty, traverse the graph
      */
@@ -316,28 +320,27 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
          * Get the first node
          */
         struct Node v = dequeue(q)->value;
-        counter++;
-        int index = getIndex(wordList, v.word, wordCount);
+        int result = stringCompare(wordList[endingPoint].word, v.word);
 
-        printf("\nCurrent node: %s\n", v.word);
+        if (result == 1) {
+            free(q);
+            free(visited);
+            return v.level;
+        }
+
+        printf("\nCurrent Node: %s\n", v.word);
+        int index = getIndex(wordList, v.word, wordCount);
 
         for (i = 0; i < wordCount; i++) {
             /*
              * Is it a neighbour?
              */
             if (matrix[index][i] == 1) {
-                int result = stringCompare(wordList[endingPoint].word, wordList[i].word);
-
-                if (result == 1) {
-                    free(q);
-                    free(visited);
-                    return counter;
-                }
-
                 /*
                  * Is it visited? If it is not, enqueue and mark it as visited.
                  */
                 if (visited[i] != 1) {
+                    wordList[i].level = v.level + 1;
                     enqueue(q, wordList[i]);
                     visited[i] = 1;
                 }
@@ -483,6 +486,7 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
          */
         struct Node *structNode = malloc(sizeof(struct Node));
         strcpy(structNode->word, tmp);
+        structNode->level = 0;
         wordList[i++] = *structNode;
     }
 
@@ -803,6 +807,7 @@ void printMenu() {
 
 
 
+// TODO:
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrixHandler: NULL argument\n");
@@ -824,6 +829,7 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
 
 
+// TODO:
 int stringCompare(const char *str1, const char *str2) {
     if (str1 == NULL || str2 == NULL) {
         perror("\nstringCompare: NULL argument");
@@ -839,6 +845,7 @@ int stringCompare(const char *str1, const char *str2) {
 
 
 
+// TODO:
 struct QueueNode *newNode(struct Node value) {
     struct QueueNode *temp = (struct QueueNode *) malloc(sizeof(struct QueueNode));
 
@@ -850,6 +857,7 @@ struct QueueNode *newNode(struct Node value) {
 
 
 
+// TODO:
 struct Queue *createQueue() {
     struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
 
@@ -861,6 +869,7 @@ struct Queue *createQueue() {
 
 
 
+// TODO:
 void enqueue(struct Queue *q, struct Node value) {
     struct QueueNode *temp = newNode(value);
 
@@ -876,6 +885,7 @@ void enqueue(struct Queue *q, struct Node value) {
 
 
 
+// TODO:
 struct QueueNode *dequeue(struct Queue *q) {
     if (q->front == NULL)
         return NULL;
@@ -891,6 +901,7 @@ struct QueueNode *dequeue(struct Queue *q) {
 
 
 
+// TODO:
 void printQueue(struct Queue *q) {
     struct QueueNode *iter = q->front;
 
@@ -904,6 +915,7 @@ void printQueue(struct Queue *q) {
 
 
 
+// TODO:
 void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
     char str[MAX_WORD_LENGTH];
 
@@ -915,6 +927,7 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) 
 
 
 
+// TODO:
 void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
     int i;
     int index = getIndex(wordList, str, wordCount);
