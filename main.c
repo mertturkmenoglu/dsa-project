@@ -625,7 +625,25 @@ void connectionHandler() {
 }
 
 
+
+/**
+ * @function fileLineCount
+ *
+ * @brief This function returns line number of the given file stream
+ *
+ * @discussion
+ * <p>This function takes a file pointer and validates that it is not NULL.
+ * After that, it counts new line characters until it reaches EOF. When counting
+ * is completed, it sets the file position to the beginning.
+ *
+ * @author Mert Turkmenoglu
+ * @bug No known bugs
+ *
+ * @param fptr is the not NULL file pointer
+ * @return number of lines in the file
+ */
 int fileLineCount(FILE *fptr) {
+    /* Validate pointer is not NULL */
     if (fptr == NULL) {
         return -1;
     }
@@ -633,16 +651,19 @@ int fileLineCount(FILE *fptr) {
     int counter = 0;
     char tmp;
 
+    /* While it is not EOF, count new line characters */
     while(!feof(fptr)) {
         tmp = fgetc(fptr);
         if(tmp == '\n')
             counter++;
     }
 
+    /* Set current file position to beginning */
     rewind(fptr);
 
     return  counter+1;
 }
+
 
 
 int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
