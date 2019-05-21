@@ -26,6 +26,7 @@
  *
  *
  * @date 28.05.2019
+ * @bug No known bugs
  * @author Mert Turkmenoglu
  */
 
@@ -587,6 +588,22 @@ int connection(const char *first, const char *second) {
 
 
 
+/**
+ * @function connectionHandler
+ *
+ * @brief This function handles connection actions
+ *
+ * @discussion
+ * <p>This function reads two string from user and then calls
+ * {@function connection}. Return value of the function
+ * indicates connection status: True or False. Depending on the
+ * return value, function prints relevant information to the stdout.
+ *
+ * @see @function connection
+ *
+ * @bug No known bugs
+ * @author Mert Turkmenoglu
+ */
 void connectionHandler() {
     char first[MAX_WORD_LENGTH];
     char second[MAX_WORD_LENGTH];
@@ -601,9 +618,9 @@ void connectionHandler() {
     result = connection(first, second);
 
     if (result == 1) {
-        printf("Same or one letter difference\n");
+        printf("Same or one letter difference\n\n");
     } else {
-        printf("More than one letter is different\n");
+        printf("More than one letter is different\n\n");
     }
 }
 
