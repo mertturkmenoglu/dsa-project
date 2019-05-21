@@ -290,6 +290,11 @@ int main() {
  * @return if there is a transformation or not
  */
 int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+    if (matrix == NULL || wordList == NULL) {
+        perror("\nbfs: NULL argument\n");
+        return -1;
+    }
+
     struct Queue *q = createQueue();
 
     /*
@@ -329,8 +334,11 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
             if(matrix[index][i] == 1) {
                 int result = stringCompare(wordList[endingPoint].word, wordList[i].word);
 
-                if (result == 1)
+                if (result == 1) {
+                    free(q);
+                    free(visited);
                     return counter;
+                }
 
                 /*
                  * Is it visited? If it is not, enqueue and mark it as visited.
@@ -376,24 +384,29 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
  * @param wordCount is the number of words read from file
  */
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
-    struct Node *first = (struct Node*) malloc(sizeof(struct Node));
-    struct Node *second = (struct Node*) malloc(sizeof(struct Node));
+    if (matrix == NULL || wordList == NULL) {
+        perror("\nbfsHandler: NULL argument\n");
+        return;
+    }
+
+    char first[MAX_WORD_LENGTH];
+    char second[MAX_WORD_LENGTH];
     int result;
 
     /*
      * Read starting and ending strings from user.
      */
     printf("\nEnter your first word: ");
-    scanf("%s", first->word);
+    scanf("%s", first);
 
     printf("\nEnter your second word: ");
-    scanf("%s", second->word);
+    scanf("%s", second);
 
     /*
      * Get the indices of the words.
      */
-    int start = getIndex(wordList, first->word, wordCount);
-    int end = getIndex(wordList, second->word, wordCount);
+    int start = getIndex(wordList, first, wordCount);
+    int end = getIndex(wordList, second, wordCount);
 
     /*
      * Get the result and print it.
@@ -401,9 +414,9 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
     result = bfs(matrix, wordList, wordCount, start, end);
 
     if (result == 0) {
-        printf("There is no transformation between %s and %s\n", first->word, second->word);
+        printf("There is no transformation between %s and %s\n", first, second);
     } else {
-        printf("There is at least one transformation between %s and %s: %d\n", first->word, second->word, result);
+        printf("There is at least one transformation between %s and %s: %d\n", first, second, result);
     }
 
     printf("----------------------\n\n");
@@ -457,6 +470,11 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
  * @return successful or not
  */
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount) {
+    if (fptr == NULL || matrix == NULL || wordList == NULL) {
+        perror("\ncreateAdjacencyMatrix: NULL argument");
+        return 0;
+    }
+
     char tmp[MAX_WORD_LENGTH];
     int i = 0;
     int j = 0;
@@ -525,6 +543,11 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
  * @return action continue / action exit value
  */
 int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount) {
+    if (matrix == NULL || wordList == NULL) {
+        perror("\nchoiceHandler: NULL argument\n");
+        return 1;
+    }
+
     switch (choice) {
         case 1:
             printMatrixHandler(matrix, wordList, lineCount);
@@ -576,6 +599,11 @@ int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount
  * @return 1 if they are neighbours otherwise 0
  */
 int connection(const char *first, const char *second) {
+    if (first == NULL || second == NULL) {
+        perror("\nconnection: NULL argument\n");
+        return 0;
+    }
+
     size_t len = ACTUAL_WORD_LENGTH;
     size_t i = 0;
     int counter = 0;
@@ -619,6 +647,11 @@ void connectionHandler() {
     printf("\nEnter your second word: ");
     scanf("%s", second);
 
+    if (strlen(first) == 0 || strlen(second) == 0) {
+        perror("\nconnectionHandler: Empty String\n");
+        return;
+    }
+
     result = connection(first, second);
 
     if (result == 1) {
@@ -649,6 +682,7 @@ void connectionHandler() {
 int fileLineCount(FILE *fptr) {
     /* Validate pointer is not NULL */
     if (fptr == NULL) {
+        perror("\nfileLineCount: NULL argument\n");
         return -1;
     }
 
@@ -689,6 +723,11 @@ int fileLineCount(FILE *fptr) {
  * @return index of the string in the wordList or -1
  */
 int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
+    if (wordList == NULL || str == NULL) {
+        perror("\ngetIndex: NULL argument\n");
+        return -1;
+    }
+
     int i = 0;
 
     while (i < wordCount) {
@@ -707,6 +746,11 @@ int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCo
 
 
 void printMatrix(int **matrix, struct Node *wordList, int n) {
+    if (matrix == NULL || wordList == NULL) {
+        perror("\nprintMatrix: NULL argument\n");
+        return;
+    }
+
     int i, j;
 
     printf("\t\t");
@@ -746,6 +790,11 @@ void printMenu() {
 
 
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
+    if (matrix == NULL || wordList == NULL) {
+        perror("\nprintMatrixHandler: NULL argument\n");
+        return;
+    }
+
     char *charptr;
     char str[MAX_STDIN_LENGTH];
     int tmp;
@@ -762,6 +811,10 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
 
 int stringCompare(const char *str1, const char *str2) {
+    if (str1 == NULL || str2 == NULL) {
+        perror("\nstringCompare: NULL argument");
+        return 0;
+    }
     int i = 0;
 
     while ((i < ACTUAL_WORD_LENGTH) && (str1[i] == str2[i]))
