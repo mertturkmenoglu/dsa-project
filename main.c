@@ -48,9 +48,10 @@
 #include <assert.h> /* For testing purposes */
 
 
-
+#define ACTUAL_WORD_LENGTH 5
 #define MAX_WORD_LENGTH 10
 #define MAX_STDIN_LENGTH 255
+#define NUMBER_BASE 10
 
 
 
@@ -129,6 +130,8 @@ void printMatrix(int **matrix, struct Node *wordList, int n);
 void printMenu();
 
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
+
+int stringCompare(const char *str1, const char *str2);
 
 struct QueueNode* newNode(struct Node value);
 
@@ -229,6 +232,9 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    assert(getIndex(wordList, "prove", lineCount) != -1);
+
+
     /*
      * User interaction happens here.
      * It prints out a menu and user chooses an action.
@@ -321,11 +327,9 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
              * Is it a neighbour?
              */
             if(matrix[index][i] == 1) {
-                // TODO: Refactor string comparison
-                int j = 0;
-                while ((j < 5) && (wordList[endingPoint].word[j] == wordList[i].word[j]))
-                    j++;
-                if (j == 5)
+                int result = stringCompare(wordList[endingPoint].word, wordList[i].word);
+
+                if (result == 1)
                     return counter;
 
                 /*
@@ -572,7 +576,7 @@ int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount
  * @return 1 if they are neighbours otherwise 0
  */
 int connection(const char *first, const char *second) {
-    size_t len = 5;
+    size_t len = ACTUAL_WORD_LENGTH;
     size_t i = 0;
     int counter = 0;
 
@@ -666,19 +670,38 @@ int fileLineCount(FILE *fptr) {
 
 
 
+/**
+ * @function getIndex
+ *
+ * @brief it returns the wordList index of the given string
+ *
+ * @discussion
+ * <p>This function takes an array of Node's and searches the given string in
+ * the array. If it cannot find it, returns -1 as unsuccessful operation indicator.
+ *
+ * @see {@code struct Node}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param wordList is the array of Node elements
+ * @param str is the searching element
+ * @param wordCount is the number of elements in the wordList
+ * @return index of the string in the wordList or -1
+ */
 int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
     int i = 0;
-    char tmp[MAX_WORD_LENGTH];
+
     while (i < wordCount) {
-        strcpy(tmp, wordList[i].word);
-        int j = 0;
-        while ((j < 5) && (tmp[j] == str[j]))
-            j++;
-        if (j == 5)
+        int result = stringCompare(wordList[i].word, str);
+
+        /* Word is found */
+        if (result == 1)
             return i;
+
         i++;
     }
 
+    /* Word is not in the array */
     return -1;
 }
 
@@ -730,10 +753,21 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
     do {
         printf("\nHow many rows do you want to see?\n");
         scanf("%s", str);
-        tmp = strtol(str, &charptr, 10);
+        tmp = strtol(str, &charptr, NUMBER_BASE);
     } while ((tmp <= 0) || (tmp > lineCount));
 
     printMatrix(matrix, wordList, tmp);
+}
+
+
+
+int stringCompare(const char *str1, const char *str2) {
+    int i = 0;
+
+    while ((i < ACTUAL_WORD_LENGTH) && (str1[i] == str2[i]))
+        i++;
+
+    return (i == ACTUAL_WORD_LENGTH) ? 1 : 0;
 }
 
 
