@@ -98,7 +98,7 @@ struct Queue {
  * @field value is the value wrapped
  * @field next is the pointer to next queue element
  */
-struct QueueNode{
+struct QueueNode {
     struct Node value;
     struct QueueNode *next;
 };
@@ -133,7 +133,7 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
 
 int stringCompare(const char *str1, const char *str2);
 
-struct QueueNode* newNode(struct Node value);
+struct QueueNode *newNode(struct Node value);
 
 struct Queue *createQueue();
 
@@ -191,7 +191,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    matrix = (int**) malloc(lineCount * sizeof(int*));
+    matrix = (int **) malloc(lineCount * sizeof(int *));
 
     if (matrix == NULL) {
         errnum = errno;
@@ -202,10 +202,10 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    for(i = 0; i < lineCount; i++)
-        matrix[i] = (int*)calloc(lineCount, sizeof(int));
+    for (i = 0; i < lineCount; i++)
+        matrix[i] = (int *) calloc(lineCount, sizeof(int));
 
-    wordList = (struct Node*) malloc(lineCount * sizeof(struct Node));
+    wordList = (struct Node *) malloc(lineCount * sizeof(struct Node));
 
     if (wordList == NULL) {
         errnum = errno;
@@ -250,7 +250,7 @@ int main() {
 
         flag = choiceHandler(choice, matrix, wordList, lineCount);
 
-    } while(flag == 1);
+    } while (flag == 1);
 
     fclose(fptr);
     free(matrix);
@@ -304,7 +304,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
     assert(q->front != NULL);
     printQueue(q);
 
-    int *visited = (int*) calloc(wordCount, sizeof(int));
+    int *visited = (int *) calloc(wordCount, sizeof(int));
 
     /*
      * Mark starting point as visited
@@ -317,7 +317,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
     /*
      * While queue is not empty, traverse the graph
      */
-    while(q->front != NULL) {
+    while (q->front != NULL) {
         /*
          * Get the first node
          */
@@ -331,7 +331,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
             /*
              * Is it a neighbour?
              */
-            if(matrix[index][i] == 1) {
+            if (matrix[index][i] == 1) {
                 int result = stringCompare(wordList[endingPoint].word, wordList[i].word);
 
                 if (result == 1) {
@@ -690,16 +690,16 @@ int fileLineCount(FILE *fptr) {
     char tmp;
 
     /* While it is not EOF, count new line characters */
-    while(!feof(fptr)) {
+    while (!feof(fptr)) {
         tmp = fgetc(fptr);
-        if(tmp == '\n')
+        if (tmp == '\n')
             counter++;
     }
 
     /* Set current file position to beginning */
     rewind(fptr);
 
-    return  counter+1;
+    return counter + 1;
 }
 
 
@@ -722,7 +722,7 @@ int fileLineCount(FILE *fptr) {
  * @param wordCount is the number of elements in the wordList
  * @return index of the string in the wordList or -1
  */
-int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCount) {
+int getIndex(struct Node *wordList, const char str[MAX_WORD_LENGTH], int wordCount) {
     if (wordList == NULL || str == NULL) {
         perror("\ngetIndex: NULL argument\n");
         return -1;
@@ -745,6 +745,25 @@ int getIndex(struct Node *wordList,  const char str[MAX_WORD_LENGTH], int wordCo
 }
 
 
+
+/**
+ * @function printMatrix
+ *
+ * @brief Prints matrix to stdout
+ *
+ * @discussion
+ * <p>Function takes an integer matrix and prints its first n row x column
+ * formatted to stdout.
+ * Then prints n words of the wordList.
+ * @see {@code struct Node}
+ *
+ * @author Mert Turkmenoglu
+ * @bug No known bugs
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array of words
+ * @param n is the number of lines will be printed
+ */
 void printMatrix(int **matrix, struct Node *wordList, int n) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrix: NULL argument\n");
@@ -754,18 +773,18 @@ void printMatrix(int **matrix, struct Node *wordList, int n) {
     int i, j;
 
     printf("\t\t");
-    for(i = 0; i < n; i++) {
-        printf("%d\t", i+1);
+    for (i = 0; i < n; i++) {
+        printf("%d\t", i + 1);
     }
 
     printf("\n");
-    for(i = 0 ; i < 5 * n; i++) {
+    for (i = 0; i < 5 * n; i++) {
         printf("-");
     }
     printf("\n");
 
-    for(i = 0; i < n; i++) {
-        printf("%d|\t\t", i+1);
+    for (i = 0; i < n; i++) {
+        printf("%d|\t\t", i + 1);
         for (j = 0; j < n; j++) {
             printf("%d\t", matrix[i][j]);
         }
@@ -773,9 +792,10 @@ void printMatrix(int **matrix, struct Node *wordList, int n) {
     }
 
     for (i = 0; i < n; i++) {
-        printf("%d-%s", i+1, wordList[i].word);
+        printf("%d-%s", i + 1, wordList[i].word);
     }
 }
+
 
 
 void printMenu() {
@@ -824,8 +844,9 @@ int stringCompare(const char *str1, const char *str2) {
 }
 
 
-struct QueueNode* newNode(struct Node value) {
-    struct QueueNode *temp = (struct QueueNode*)malloc(sizeof(struct QueueNode));
+
+struct QueueNode *newNode(struct Node value) {
+    struct QueueNode *temp = (struct QueueNode *) malloc(sizeof(struct QueueNode));
 
     temp->value = value;
     temp->next = NULL;
@@ -834,14 +855,16 @@ struct QueueNode* newNode(struct Node value) {
 }
 
 
+
 struct Queue *createQueue() {
-    struct Queue *q = (struct Queue*)malloc(sizeof(struct Queue));
+    struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
 
     q->front = NULL;
     q->rear = NULL;
 
     return q;
 }
+
 
 
 void enqueue(struct Queue *q, struct Node value) {
@@ -858,6 +881,7 @@ void enqueue(struct Queue *q, struct Node value) {
 }
 
 
+
 struct QueueNode *dequeue(struct Queue *q) {
     if (q->front == NULL)
         return NULL;
@@ -871,16 +895,19 @@ struct QueueNode *dequeue(struct Queue *q) {
     return temp;
 }
 
+
+
 void printQueue(struct Queue *q) {
     struct QueueNode *iter = q->front;
 
-    while(iter != NULL) {
+    while (iter != NULL) {
         printf("%s\n", iter->value.word);
         iter = iter->next;
     }
 
     printf("----------\n");
 }
+
 
 
 void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
@@ -893,11 +920,12 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) 
 }
 
 
+
 void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
     int i;
     int index = getIndex(wordList, str, wordCount);
 
-    for(i = 0; i < wordCount; i++) {
+    for (i = 0; i < wordCount; i++) {
         if (matrix[index][i] == 1) {
             printf("%s\n", wordList[i].word);
         }

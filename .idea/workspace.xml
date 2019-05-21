@@ -12,6 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c1e3b1-bb0a-4071-9a8f-237b9fc1c649" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -44,8 +46,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="815" column="17" selection-start-line="815" selection-start-column="17" selection-end-line="815" selection-end-column="17" />
+            <state relative-caret-position="426">
+              <caret line="922" selection-start-line="922" selection-end-line="922" />
             </state>
           </provider>
         </entry>
@@ -93,20 +95,7 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="dsa_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dsa-project" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -114,7 +103,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -154,7 +143,8 @@
       <workItem from="1558374741822" duration="2176000" />
       <workItem from="1558383419841" duration="25000" />
       <workItem from="1558449169264" duration="7007000" />
-      <workItem from="1558467224921" duration="3301000" />
+      <workItem from="1558467224921" duration="3518000" />
+      <workItem from="1558470771473" duration="845000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -167,7 +157,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54757000" />
+    <option name="totallyTimeSpent" value="55819000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
@@ -178,7 +168,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.48535565" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.48535565" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39958158" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -290,8 +280,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="815" column="17" selection-start-line="815" selection-start-column="17" selection-end-line="815" selection-end-column="17" />
+        <state relative-caret-position="426">
+          <caret line="922" selection-start-line="922" selection-end-line="922" />
         </state>
       </provider>
     </entry>
