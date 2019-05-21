@@ -115,7 +115,7 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
 
 int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int lineCount);
 
-int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount);
+int choiceHandler(long choice, int **matrix, struct Node *wordList, int lineCount);
 
 int connection(const char *first, const char *second);
 
@@ -125,7 +125,7 @@ int fileLineCount(FILE *fptr);
 
 int getIndex(struct Node *wordList, const char str[MAX_WORD_LENGTH], int wordCount);
 
-void printMatrix(int **matrix, struct Node *wordList, int n);
+void printMatrix(int **matrix, struct Node *wordList, long n);
 
 void printMenu();
 
@@ -149,10 +149,6 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount);
 
 
 
-extern int errno;
-
-
-
 int main() {
     FILE *fptr = NULL;
 
@@ -165,9 +161,10 @@ int main() {
 
     int i;
     int result;
-    int choice;
     int flag;
     int errnum;
+
+    long choice;
 
     printf("\nEnter word file path: \n");
     printf("(Example: /home/mert/codes/dsa-project/kelime.txt)\n");
@@ -203,7 +200,7 @@ int main() {
     }
 
     for (i = 0; i < lineCount; i++)
-        matrix[i] = (int *) calloc(lineCount, sizeof(int));
+        matrix[i] = (int *) calloc((size_t) lineCount, sizeof(int));
 
     wordList = (struct Node *) malloc(lineCount * sizeof(struct Node));
 
@@ -231,9 +228,6 @@ int main() {
         free(wordList);
         exit(EXIT_FAILURE);
     }
-
-    assert(getIndex(wordList, "prove", lineCount) != -1);
-
 
     /*
      * User interaction happens here.
@@ -304,7 +298,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
     assert(q->front != NULL);
     printQueue(q);
 
-    int *visited = (int *) calloc(wordCount, sizeof(int));
+    int *visited = (int *) calloc((size_t) wordCount, sizeof(int));
 
     /*
      * Mark starting point as visited
@@ -542,7 +536,7 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
  * @param lineCount is the number of line in the word file
  * @return action continue / action exit value
  */
-int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount) {
+int choiceHandler(long choice, int **matrix, struct Node *wordList, int lineCount) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nchoiceHandler: NULL argument\n");
         return 1;
@@ -687,7 +681,7 @@ int fileLineCount(FILE *fptr) {
     }
 
     int counter = 0;
-    char tmp;
+    int tmp;
 
     /* While it is not EOF, count new line characters */
     while (!feof(fptr)) {
@@ -764,7 +758,7 @@ int getIndex(struct Node *wordList, const char str[MAX_WORD_LENGTH], int wordCou
  * @param wordList is the array of words
  * @param n is the number of lines will be printed
  */
-void printMatrix(int **matrix, struct Node *wordList, int n) {
+void printMatrix(int **matrix, struct Node *wordList, long n) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrix: NULL argument\n");
         return;
@@ -817,7 +811,7 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
     char *charptr;
     char str[MAX_STDIN_LENGTH];
-    int tmp;
+    long tmp;
 
     do {
         printf("\nHow many rows do you want to see?\n");
