@@ -6,6 +6,8 @@
       <w>errnum</w>
       <w>kelime</w>
       <w>mert</w>
+      <w>perror</w>
+      <w>strerr</w>
       <w>struct</w>
       <w>turkmenoglu</w>
     </words>

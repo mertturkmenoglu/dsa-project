@@ -1,9 +1,12 @@
 /**
+ * @file main.c
  * Data Structures and Algorithms Semester Project
  *
  * Problem: For given two words, on each step, changing only one letter, find
  * if you can convert the first word to second word and if you can,
  * print the path.
+ *
+ *
  *
  * Written and tested on Linux Mint 19 Cinnamon
  * Kernel 4.15.0-47-generic
@@ -11,44 +14,99 @@
  * GNU Make 4.1
  * Built for x86_64-pc-linux-gnu
  *
+ *
+ *
  * IDE:
  * CLion 2019.1.2
  * Build #CL-191.6707.69, built on April 18, 2019
  *
  *
+ *
  * stdPath = /home/mert/codes/dsa-project/kelime.txt
  *
+ *
+ * @date 28.05.2019
  * @author Mert Turkmenoglu
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <assert.h>
+
+/* Standard IO includes */
+#include <stdio.h>  /* For console and file i/o */
+
+/* Standard library includes */
+#include <stdlib.h> /* For dynamic memory allocation */
+
+/* String library includes */
+#include <string.h> /* For string manipulations */
+
+/* Error handling includes */
+#include <errno.h>  /* For perror() and strerr() */
+
+/* Assertion includes */
+#include <assert.h> /* For testing purposes */
+
+
 
 #define MAX_WORD_LENGTH 10
 #define MAX_STDIN_LENGTH 255
 
 
+
+/**
+ * @struct Node
+ * @abstract a wrapping model for strings
+ *
+ * @discussion An abstraction level for expressing graph. An instance
+ * of the struct holds the word for given node.
+ *
+ * @field word is the string for holding information.
+ */
 struct Node {
     char word[MAX_WORD_LENGTH];
 };
 
 
+
+/**
+ * @struct Queue
+ * @abstract a basic model for Queue data structure
+ *
+ * @discussion An abstract level for expressing graph. It points to
+ * front element and rear element. It is implemented using linked list
+ *
+ * @field front is the pointer to front of the queue
+ * @field rear is the pointer to rear of the queue
+ */
 struct Queue {
     struct QueueNode *front;
     struct QueueNode *rear;
 };
 
 
+
+/**
+ * @struct QueueNode
+ * @abstract a queue element
+ *
+ * @discussion An element of the queue. Queue is implemented using linked list
+ * and a QueueNode holds the information for the value and the address of the
+ * next element of the queue.
+ *
+ * @field value is the value wrapped
+ * @field next is the pointer to next queue element
+ */
 struct QueueNode{
     struct Node value;
     struct QueueNode *next;
 };
 
 
+
+/*
+ * Function prototypes
+ * TODO: Move this part to a separate header file
+ */
 int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
 
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
@@ -86,7 +144,9 @@ void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENG
 void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount);
 
 
+
 extern int errno;
+
 
 
 int main() {
@@ -105,8 +165,9 @@ int main() {
     int flag;
     int errnum;
 
-    printf("\nEnter word file path: ");
-    scanf("%s", path);
+    printf("\nEnter word file path: \n");
+    printf("(Example: /home/mert/codes/dsa-project/kelime.txt)\n");
+    fscanf(stdin, "%s", path);
 
     fptr = fopen(path, "r");
 
@@ -120,6 +181,12 @@ int main() {
 
     int lineCount = fileLineCount(fptr);
 
+    if (lineCount <= 0) {
+        fclose(fptr);
+        perror("File can not be read.");
+        exit(EXIT_FAILURE);
+    }
+
     matrix = (int**) malloc(lineCount * sizeof(int*));
 
     if (matrix == NULL) {
@@ -127,6 +194,7 @@ int main() {
         fprintf(stderr, "Error No: %d\n", errno);
         perror("Unsuccessful matrix creation");
         fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        fclose(fptr);
         exit(EXIT_FAILURE);
     }
 
@@ -140,28 +208,34 @@ int main() {
         fprintf(stderr, "Error No: %d\n", errno);
         perror("Unsuccessful word list creation");
         fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        fclose(fptr);
+        free(matrix);
         exit(EXIT_FAILURE);
     }
 
     result = createAdjacencyMatrix(fptr, matrix, wordList, lineCount);
 
     if (result == 1) {
-        printf("Adjacency Matrix created successfully\n");
+        printf("Adjacency Matrix created successfully\n\n\n");
     } else {
         errnum = errno;
         fprintf(stderr, "Error No: %d\n", errno);
         perror("Unsuccessful adjacency matrix creation");
         fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+        fclose(fptr);
+        free(matrix);
+        free(wordList);
         exit(EXIT_FAILURE);
     }
 
     /*
      * User interaction happens here.
-     * It prints out a menu and user chooses
-     * an action. A handler function will be called with necessary parameters.
+     * It prints out a menu and user chooses an action.
+     * A handler function will be called with necessary parameters.
      * It will ask the user for action until user chooses to exit action.
      */
     do {
+
         printMenu();
         printf("Enter your choice: ");
         scanf("%s", str);
@@ -181,11 +255,14 @@ int main() {
 
 
 /**
- * Breadth First Search algorithm implementation
+ * @function bfs
+ * @brief Breadth First Search algorithm implementation
  *
- * This function traverses on the given graph and tries to find
+ * @discussion
+ * <p>This function traverses on the given graph and tries to find
  * if there is a transformation between given two word.
  *
+ * @warning
  * <p><strong>Note that this implementation is <i>not</i> generic</strong>
  * It is a specialized BFS implementation for disclosed purposes.
  *
@@ -271,11 +348,14 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
 
 
 /**
+ * @function bfsHandler
+ *
  * Breadth First Search Handler
  *
- * This function takes necessary inputs from user
+ * @brief This function takes necessary inputs from user
  * and handles bfs function calls.
  *
+ * @discussion
  * <p>Call for this function comes after user choosing the transformation action.
  * After the call, function will ask two string input for user and reads it from
  * stdin. Then it will call the {@link getIndex} and assign the index values of
@@ -327,8 +407,11 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
 
 
 /**
- * Create Adjacency Matrix
+ * @function createAdjacencyMatrix
  *
+ * @brief Create Adjacency Matrix from graph
+ *
+ * @discussion
  * <p>This function reads lines a.k.a words from the given file and wraps them in a
  * structure. Then assigns them to given wordList array. After that, it browses
  * the matrix and assigns 1 or 0 to given point. 1 means that relative row
@@ -359,7 +442,7 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
  * function should return 1.
  *
  * @author Mert Turkmenoglu
- * 
+ *
  * @see {@code struct Node}
  *
  * @param fptr is the not NULL file pointer to the word list file stream
@@ -410,6 +493,32 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
 
 
 
+/**
+ * @function choiceHandler
+ *
+ * @brief this function handles user actions
+ *
+ * @discussion
+ * <p>This function takes user input and makes necessary function call
+ * If user chose a valid action, relevant function will be called from this
+ * point of the code flow. If user enters(chooses) an invalid value, it will
+ * print an error message to stderr stream. {@code perror()}
+ *
+ * <p>Return of the function will be assigned to a flag value used for input
+ * loop. If user chooses to exit action(case 0), function will return exit value
+ * to previous code flow point. Otherwise, it will return a continue value and
+ * user interaction loop will continue.
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @see {@code struct Node}
+ *
+ * @param choice is the user action decision
+ * @param matrix is the adjacency matrix that represents the graph connection
+ * @param wordList is the array of Nodes that holds words of the graph
+ * @param lineCount is the number of line in the word file
+ * @return action continue / action exit value
+ */
 int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount) {
     switch (choice) {
         case 1:
@@ -427,7 +536,7 @@ int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount
         case 0:
             break;
         default:
-            printf("Invalid input\n");
+            perror("Invalid input\n");
     }
 
     return (choice == 0) ? 0 : 1;
@@ -435,6 +544,32 @@ int choiceHandler(int choice, int **matrix, struct Node *wordList, int lineCount
 
 
 
+/**
+ * @function connection
+ *
+ * @brief finds if there is a connection between two nodes
+ *
+ * @discussion
+ * <p>This function takes two string argument and it will compare every
+ * character of them. If they are not different, they represents the
+ * same node{@see @code struct Node}. If they are different with only
+ * one character, it means that they are neighbours on the graph. If
+ * they are different with more than one character, they may be connected
+ * but they cannot transform into each other with only one step. So they
+ * are not neighbours, in other words, they are not connected.
+ *
+ * @warning
+ * <p>Connection word is used for "being neighbour" in the program context.
+ * In real use, if there is a path between two node, they may be considered
+ * as connected but in this context, there cannot be any other node in the
+ * path.
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param first is the first string value
+ * @param second is the second string value
+ * @return 1 if they are neighbours otherwise 0
+ */
 int connection(const char *first, const char *second) {
     size_t len = 5;
     size_t i = 0;
