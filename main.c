@@ -201,8 +201,18 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    for (i = 0; i < lineCount; i++)
+    for (i = 0; i < lineCount; i++) {
         matrix[i] = (int *) calloc((size_t) lineCount, sizeof(int));
+        if (matrix[i] == NULL) {
+            errnum = errno;
+            fprintf(stderr, "Error No: %d\n", errno);
+            perror("Unsuccessful matrix creation");
+            fprintf(stderr, "Error memory allocation: %s\n", strerror(errnum));
+            fclose(fptr);
+            free(matrix);
+            exit(EXIT_FAILURE);
+        }
+    }
 
     wordList = (struct Node *) malloc(lineCount * sizeof(struct Node));
 
@@ -405,6 +415,11 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
     int start = getIndex(wordList, first, wordCount);
     int end = getIndex(wordList, second, wordCount);
 
+    if (start == -1 || end == -1) {
+        perror("\nYou entered invalid words. Please enter words from the file.\n");
+        return;
+    }
+
     /*
      * Get the result and print it.
      */
@@ -413,7 +428,7 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
     if (result == 0) {
         printf("There is no transformation between %s and %s\n", first, second);
     } else {
-        printf("There is at least one transformation between %s and %s: %d\n", first, second, result);
+        printf("There is at least one transformation between %s and %s: %d steps\n", first, second, result);
     }
 
     printf("----------------------\n\n");
@@ -640,10 +655,10 @@ void connectionHandler() {
     int result;
 
     printf("\nEnter your first word: ");
-    scanf("%s", first);
+    fscanf(stdin, "%s", first);
 
     printf("\nEnter your second word: ");
-    scanf("%s", second);
+    fscanf(stdin, "%s", second);
 
     if (strlen(first) == 0 || strlen(second) == 0) {
         perror("\nconnectionHandler: Empty String\n");
@@ -931,6 +946,12 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) 
 void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
     int i;
     int index = getIndex(wordList, str, wordCount);
+
+    if (index == -1) {
+        errno = 1;
+        perror("You entered invalid word. Please enter a word from file.");
+        return;
+    }
 
     for (i = 0; i < wordCount; i++) {
         if (matrix[index][i] == 1) {
