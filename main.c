@@ -145,7 +145,7 @@ struct QueueNode *dequeue(struct Queue *q);
 
 void printQueue(struct Queue *q);
 
-void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount);
+void printNeighbours(int **matrix, struct Node *wordList, int index, int wordCount);
 
 void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount);
 
@@ -937,21 +937,22 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) 
     printf("\nEnter your word: ");
     scanf("%s", str);
 
-    printNeighbours(matrix, wordList, str, lineCount);
-}
-
-
-
-// TODO:
-void printNeighbours(int **matrix, struct Node *wordList, char str[MAX_WORD_LENGTH], int wordCount) {
-    int i;
-    int index = getIndex(wordList, str, wordCount);
+    int index = getIndex(wordList, str, lineCount);
 
     if (index == -1) {
         errno = 1;
         perror("You entered invalid word. Please enter a word from file.");
         return;
     }
+
+    printNeighbours(matrix, wordList, index, lineCount);
+}
+
+
+
+// TODO:
+void printNeighbours(int **matrix, struct Node *wordList, int index, int wordCount) {
+    int i;
 
     for (i = 0; i < wordCount; i++) {
         if (matrix[index][i] == 1) {
