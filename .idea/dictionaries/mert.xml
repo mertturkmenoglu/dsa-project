@@ -1,12 +1,14 @@
 <component name="ProjectDictionaryState">
   <dictionary name="mert">
     <words>
+      <w>calloc</w>
       <w>charptr</w>
       <w>dequeues</w>
       <w>errnum</w>
       <w>kelime</w>
       <w>mert</w>
       <w>perror</w>
+      <w>printf</w>
       <w>strerr</w>
       <w>struct</w>
       <w>turkmenoglu</w>

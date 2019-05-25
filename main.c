@@ -8,6 +8,18 @@
  *
  *
  *
+ * !!!IMPORTANT!!!
+ * Your file must follow this pattern: [a-z]{5}'\n'
+ * Be sure that:
+ *      - Your words have five letters
+ *      - Letters are lowercase
+ *      - Letters are belong to English alphabet
+ *      - They are separated with a new line character(one word for each line)
+ *      - File does not contain any other character
+ *!!!IMPORTANT!!!
+ *
+ *
+ *
  * Written and tested on Linux Mint 19 Cinnamon
  * Kernel 4.15.0-47-generic
  * gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0
@@ -23,6 +35,7 @@
  *
  *
  * stdPath = /home/mert/codes/dsa-project/kelime.txt
+ *
  *
  *
  * @date 28.05.2019
@@ -63,11 +76,32 @@
  * of the struct holds the word and the level for given node.
  *
  * @field word is the string for holding information.
- * @level is the distance to the relative root at given time
+ * @field level is the distance to the relative root at given time
+ * @field parent is the parent node for a specific path
  */
 struct Node {
     char word[MAX_WORD_LENGTH];
     int level;
+    struct Node *parent;
+};
+
+
+
+/**
+ * @struct Path
+ * @abstract a wrapping model for BFS graph path
+ *
+ * @discussion BFS finds a path between two given nodes. It needs to return
+ * the path, path length and step count. This structure wraps all these information
+ *
+ * @field path is an array that holds the node ID's
+ * @field n is the path array's length
+ * @field step is the transformation step count
+ */
+struct Path {
+    int *path;
+    int n;
+    int step;
 };
 
 
@@ -76,7 +110,7 @@ struct Node {
  * @struct Queue
  * @abstract a basic model for Queue data structure
  *
- * @discussion An abstract level for expressing graph. It points to
+ * @discussion An abstract level for expressing queue. It points to
  * front element and rear element. It is implemented using linked list
  *
  * @field front is the pointer to front of the queue
@@ -111,7 +145,7 @@ struct QueueNode {
  * Function prototypes
  * TODO: Move this part to a separate header file
  */
-int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
+struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
 
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
 
@@ -267,6 +301,7 @@ int main() {
 
 
 
+// TODO: Code flow is too complex for bfs. This function should be split into smaller functions
 /**
  * @function bfs
  * @brief Breadth First Search algorithm implementation
@@ -293,18 +328,23 @@ int main() {
  * @param wordCount is the number of words read from file
  * @param startingPoint is the starting node index
  * @param endingPoint is the ending node index
- * @return if there is a transformation or not
+ * @return transformation path or NULL
  */
-int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nbfs: NULL argument\n");
-        return -1;
+        return NULL;
     }
 
     int i;
 
-    for (i = 0; i < wordCount; i++)
+    /*
+     * Assign initial level and parent values for every word.
+     */
+    for (i = 0; i < wordCount; i++) {
         wordList[i].level = 0;
+        wordList[i].parent = NULL;
+    }
 
     struct Queue *q = createQueue();
 
@@ -313,8 +353,11 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
      */
     enqueue(q, wordList[startingPoint]);
     assert(q->front != NULL);
-    printQueue(q);
 
+    /*
+     * Allocate an array for holding marking information.
+     * Calloc will assign first values as 0.
+     */
     int *visited = (int *) calloc((size_t) wordCount, sizeof(int));
 
     /*
@@ -329,17 +372,41 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
         /*
          * Get the first node
          */
-        struct Node v = dequeue(q)->value;
-        int result = stringCompare(wordList[endingPoint].word, v.word);
+        struct Node *v = &dequeue(q)->value;
+        int result = stringCompare(wordList[endingPoint].word, v->word);
 
+        /* Is it the searched one? */
         if (result == 1) {
+            struct Path *path = (struct Path*) malloc(sizeof(struct Path));
+
+            path->path = (int*) malloc((v->level + 1) * sizeof(int));
+            path->n = v->level + 1;
+            path->step = v->level;
+
+            int j = v->level;
+
+            while(v != NULL) {
+                path->path[j--] = getIndex(wordList, v->word, wordCount);
+                v = v->parent;
+            }
+
             free(q);
             free(visited);
-            return v.level;
+
+            return path;
         }
 
-        printf("\nCurrent Node: %s\n", v.word);
-        int index = getIndex(wordList, v.word, wordCount);
+        /**
+         * I do not understand why we have to print out which nodes we are looking.
+         * It breaks the understanding of a function. A function should do only one thing.
+         * BFS finds a path between two given nodes and returns the path.
+         * It should not print out what nodes we are looking. Furthermore, these outputs could
+         * change because of the implementation dependency. I do not think this requirement
+         * is necessary. I think this should be removed. So I added a to-do comment.
+         */
+        // TODO: Remove printf() call for given reasons
+        printf("\nCurrent Node: %s\n", v->word);
+        int index = getIndex(wordList, v->word, wordCount);
 
         for (i = 0; i < wordCount; i++) {
             /*
@@ -347,22 +414,27 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
              */
             if (matrix[index][i] == 1) {
                 /*
-                 * Is it visited? If it is not, enqueue and mark it as visited.
+                 * Is it visited? If it is not, mark it as visited,
+                 * assign the level and parent values then enqueue it.
                  */
                 if (visited[i] != 1) {
-                    wordList[i].level = v.level + 1;
-                    enqueue(q, wordList[i]);
                     visited[i] = 1;
+                    wordList[i].level = v->level + 1;
+                    wordList[i].parent = v;
+                    enqueue(q, wordList[i]);
                 }
             }
         }
     }
 
+    free(q);
+    free(visited);
+
     /*
      * If queue becomes empty, there is no transformation between given words.
      * Return failure value
      */
-    return 0;
+    return NULL;
 }
 
 
@@ -396,9 +468,10 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
         return;
     }
 
+    int i;
     char first[MAX_WORD_LENGTH];
     char second[MAX_WORD_LENGTH];
-    int result;
+    struct Path *result;
 
     /*
      * Read starting and ending strings from user.
@@ -425,10 +498,14 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
      */
     result = bfs(matrix, wordList, wordCount, start, end);
 
-    if (result == 0) {
+    if (result == NULL) {
         printf("There is no transformation between %s and %s\n", first, second);
     } else {
-        printf("There is at least one transformation between %s and %s: %d steps\n", first, second, result);
+        printf("There is a transformation between %s and %s: %d steps\n", first, second, result->step);
+        for(i = 0; i < result->n; i++) {
+            printf("%s\n", wordList[result->path[i]].word);
+        }
+        free(result);
     }
 
     printf("----------------------\n\n");

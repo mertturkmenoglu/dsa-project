@@ -15,7 +15,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c1e3b1-bb0a-4071-9a8f-237b9fc1c649" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/mert.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/mert.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/dsa_project" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/dsa_project" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -51,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="947" column="43" selection-start-line="947" selection-start-column="43" selection-end-line="947" selection-end-column="43" />
+            <state relative-caret-position="563">
+              <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -60,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kelime.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32295">
-              <caret line="2153" column="5" selection-start-line="2153" selection-start-column="5" selection-end-line="2153" selection-end-column="5" />
+            <state relative-caret-position="25408">
+              <caret line="2153" column="5" selection-start-line="2153" selection-end-line="2153" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -82,6 +85,7 @@
       <find>tand</find>
       <find>amon</find>
       <find>glo</find>
+      <find>cloze</find>
       <find>think</find>
     </findStrings>
   </component>
@@ -104,9 +108,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="961" />
-    <option name="width" value="959" />
-    <option name="height" value="1079" />
+    <option name="x" value="575" />
+    <option name="y" value="65" />
+    <option name="width" value="949" />
+    <option name="height" value="1015" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -167,6 +172,7 @@
       <workItem from="1558509470577" duration="266000" />
       <workItem from="1558572836832" duration="1416000" />
       <workItem from="1558604879112" duration="112000" />
+      <workItem from="1558787567045" duration="8285000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -186,7 +192,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64410000" />
+    <option name="totallyTimeSpent" value="72695000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
@@ -197,7 +203,7 @@
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32977587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.4429029" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.6776447" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3992016" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -207,7 +213,7 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32845187" />
       <window_info anchor="bottom" id="CMake" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.3276414" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32657418" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32934132" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -303,17 +309,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.c">
+    <entry file="file://$PROJECT_DIR$/kelime.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="947" column="43" selection-start-line="947" selection-start-column="43" selection-end-line="947" selection-end-column="43" />
+        <state relative-caret-position="25408">
+          <caret line="2153" column="5" selection-start-line="2153" selection-end-line="2153" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kelime.txt">
+    <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32295">
-          <caret line="2153" column="5" selection-start-line="2153" selection-start-column="5" selection-end-line="2153" selection-end-column="5" />
+        <state relative-caret-position="563">
+          <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
         </state>
       </provider>
     </entry>
