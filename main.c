@@ -601,6 +601,53 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
 
 
 
+int checkNeighbours(int **matrix, int firstIndex, int secondIndex) {
+    if (matrix == NULL) {
+        perror("\ncheckNeighbours: NULL argument\n");
+        return 0;
+    }
+
+    return (matrix[firstIndex][secondIndex]);
+}
+
+
+
+
+void checkNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
+    char first[MAX_WORD_LENGTH];
+    char second[MAX_WORD_LENGTH];
+    int result;
+
+    printf("\nEnter your first word: ");
+    fscanf(stdin, "%s", first);
+
+    printf("\nEnter your second word: ");
+    fscanf(stdin, "%s", second);
+
+    if (strlen(first) == 0 || strlen(second) == 0) {
+        perror("\ncheckNeighboursHandler: Empty String\n");
+        return;
+    }
+
+    int firstIndex = getIndex(wordList, first, lineCount);
+    int secondIndex = getIndex(wordList, second, lineCount);
+
+    if (firstIndex == -1 || secondIndex == -1) {
+        perror("\nYou entered invalid words. Please enter words from the file.\n");
+        return;
+    }
+
+    result = checkNeighbours(matrix, firstIndex, secondIndex);
+
+    if (result == 1) {
+        printf("%s and %s are neighbours\n\n", first, second);
+    } else {
+        printf("%s and %s are not neighbours\n\n", first, second);
+    }
+}
+
+
+
 /**
  * @function choiceHandler
  *
@@ -638,12 +685,15 @@ int choiceHandler(long choice, int **matrix, struct Node *wordList, int lineCoun
             printMatrixHandler(matrix, wordList, lineCount);
             break;
         case 2:
-            connectionHandler();
+            checkNeighboursHandler(matrix, wordList, lineCount);
             break;
         case 3:
-            bfsHandler(matrix, wordList, lineCount);
+            connectionHandler();
             break;
         case 4:
+            bfsHandler(matrix, wordList, lineCount);
+            break;
+        case 5:
             printNeighboursHandler(matrix, wordList, lineCount);
             break;
         case 0:
@@ -923,12 +973,14 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
 
 void printMenu() {
-    printf("1- Print Adjacency Matrix\n");
-    printf("2- isDifferentOneLetter\n");
-    printf("3- isTransformable\n");
-    printf("4- printNeighbours\n");
+    printf("---------------------------------------------------------------\n");
+    printf("1- Print Adjacency Matrix (First n element of connection matrix)\n");
+    printf("2- areTheyNeighbours (Give two words from matrix)\n");
+    printf("3- isDifferentOneLetter (Give any two words)\n");
+    printf("4- isTransformable (Is there any path between given two words)\n");
+    printf("5- printNeighbours (Print all 1-step transformations)\n");
     printf("0- Exit\n");
-    printf("-------------------------\n");
+    printf("---------------------------------------------------------------\n");
 }
 
 

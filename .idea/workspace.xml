@@ -50,8 +50,45 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1627">
-              <caret line="1147" column="1" lean-forward="true" selection-start-line="1147" selection-start-column="1" selection-end-line="1147" selection-end-column="1" />
+            <state relative-caret-position="69">
+              <caret line="609" column="45" selection-start-line="609" selection-start-column="45" selection-end-line="609" selection-end-column="45" />
+              <folding>
+                <element signature="e#4495#7557#0" />
+                <element signature="e#7657#8723#0" />
+                <element signature="e#7524#11866#0" />
+                <element signature="e#11892#12683#0" />
+                <element signature="e#14001#16339#0" />
+                <element signature="e#16356#17614#1" />
+                <element signature="e#17662#18692#0" />
+                <element signature="e#17638#19484#0" />
+                <element signature="e#19412#20432#0" />
+                <element signature="e#20389#20806#1" />
+                <element signature="e#20854#21300#0" />
+                <element signature="e#21257#21843#1" />
+                <element signature="e#21891#22372#0" />
+                <element signature="e#22329#22795#1" />
+                <element signature="e#22843#23383#0" />
+                <element signature="e#23340#23793#1" />
+                <element signature="e#23841#24284#0" />
+                <element signature="e#24241#24891#1" />
+                <element signature="e#24840#25283#0" />
+                <element signature="e#24904#25405#1" />
+                <element signature="e#24939#25183#0" />
+                <element signature="e#26062#26183#0" />
+                <element signature="e#25666#25902#1" />
+                <element signature="e#26709#26830#0" />
+                <element signature="e#25915#26339#1" />
+                <element signature="e#27631#27752#0" />
+                <element signature="e#26352#26660#1" />
+                <element signature="e#28349#28470#0" />
+                <element signature="e#28351#28507#0" />
+                <element signature="e#28843#28964#0" />
+                <element signature="e#28511#28753#0" />
+                <element signature="e#29457#29578#0" />
+                <element signature="e#28757#29009#0" />
+                <element signature="e#30040#30161#0" />
+                <element signature="e#30041#30240#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -173,7 +210,7 @@
       <workItem from="1558572836832" duration="1416000" />
       <workItem from="1558604879112" duration="112000" />
       <workItem from="1558787567045" duration="8285000" />
-      <workItem from="1558797995028" duration="3677000" />
+      <workItem from="1558797995028" duration="4579000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -193,7 +230,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76372000" />
+    <option name="totallyTimeSpent" value="77274000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
@@ -313,8 +350,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1627">
-          <caret line="1147" column="1" lean-forward="true" selection-start-line="1147" selection-start-column="1" selection-end-line="1147" selection-end-column="1" />
+        <state relative-caret-position="69">
+          <caret line="609" column="45" selection-start-line="609" selection-start-column="45" selection-end-line="609" selection-end-column="45" />
+          <folding>
+            <element signature="e#4495#7557#0" />
+            <element signature="e#7657#8723#0" />
+            <element signature="e#7524#11866#0" />
+            <element signature="e#11892#12683#0" />
+            <element signature="e#14001#16339#0" />
+            <element signature="e#16356#17614#1" />
+            <element signature="e#17662#18692#0" />
+            <element signature="e#17638#19484#0" />
+            <element signature="e#19412#20432#0" />
+            <element signature="e#20389#20806#1" />
+            <element signature="e#20854#21300#0" />
+            <element signature="e#21257#21843#1" />
+            <element signature="e#21891#22372#0" />
+            <element signature="e#22329#22795#1" />
+            <element signature="e#22843#23383#0" />
+            <element signature="e#23340#23793#1" />
+            <element signature="e#23841#24284#0" />
+            <element signature="e#24241#24891#1" />
+            <element signature="e#24840#25283#0" />
+            <element signature="e#24904#25405#1" />
+            <element signature="e#24939#25183#0" />
+            <element signature="e#26062#26183#0" />
+            <element signature="e#25666#25902#1" />
+            <element signature="e#26709#26830#0" />
+            <element signature="e#25915#26339#1" />
+            <element signature="e#27631#27752#0" />
+            <element signature="e#26352#26660#1" />
+            <element signature="e#28349#28470#0" />
+            <element signature="e#28351#28507#0" />
+            <element signature="e#28843#28964#0" />
+            <element signature="e#28511#28753#0" />
+            <element signature="e#29457#29578#0" />
+            <element signature="e#28757#29009#0" />
+            <element signature="e#30040#30161#0" />
+            <element signature="e#30041#30240#0" />
+          </folding>
         </state>
       </provider>
     </entry>
