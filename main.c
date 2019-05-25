@@ -61,6 +61,7 @@
 #include <assert.h> /* For testing purposes */
 
 
+
 #define ACTUAL_WORD_LENGTH 5
 #define MAX_WORD_LENGTH 10
 #define MAX_STDIN_LENGTH 255
@@ -135,7 +136,7 @@ struct Queue {
  * @field next is the pointer to next queue element
  */
 struct QueueNode {
-    struct Node value;
+    void *value;
     struct QueueNode *next;
 };
 
@@ -168,15 +169,13 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount);
 
 int stringCompare(const char *str1, const char *str2);
 
-struct QueueNode *newNode(struct Node value);
+struct QueueNode *newNode(void *value);
 
 struct Queue *createQueue();
 
-void enqueue(struct Queue *q, struct Node value);
+void enqueue(struct Queue *q, void *value);
 
-struct QueueNode *dequeue(struct Queue *q);
-
-void printQueue(struct Queue *q);
+void *dequeue(struct Queue *q);
 
 void printNeighbours(int **matrix, struct Node *wordList, int index, int wordCount);
 
@@ -349,7 +348,7 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
     /*
      * Start by enqueueing the starting node
      */
-    enqueue(q, wordList[startingPoint]);
+    enqueue(q, (void*) &wordList[startingPoint]);
 
     /*
      * Allocate an array for holding marking information.
@@ -376,7 +375,7 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
         /*
          * Get the first node
          */
-        struct Node *v = &dequeue(q)->value;
+        struct Node *v = (struct Node *) ((struct QueueNode *) dequeue(q))->value;
         int result = stringCompare(wordList[endingPoint].word, v->word);
 
         /* Is it the searched one? */
@@ -422,7 +421,7 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
                 visited[i] = 1;
                 wordList[i].level = v->level + 1;
                 wordList[i].parent = v;
-                enqueue(q, wordList[i]);
+                enqueue(q, (void*) &wordList[i]);
             }
         }
     }
@@ -1075,11 +1074,11 @@ struct Queue *createQueue() {
  * @param q is the queue instance to operate on
  * @return the first element of the queue
  */
-struct QueueNode *dequeue(struct Queue *q) {
+void *dequeue(struct Queue *q) {
     if (q->front == NULL)
         return NULL;
 
-    struct QueueNode *temp = q->front;
+    void *temp = q->front;
     q->front = q->front->next;
 
     if (q->front == NULL)
@@ -1106,7 +1105,7 @@ struct QueueNode *dequeue(struct Queue *q) {
  * @param q is the queue instance to operate on
  * @param value is the new element to add queue
  */
-void enqueue(struct Queue *q, struct Node value) {
+void enqueue(struct Queue *q, void *value) {
     struct QueueNode *temp = newNode(value);
 
     if (q->rear == NULL) {
@@ -1139,31 +1138,11 @@ void enqueue(struct Queue *q, struct Node value) {
  * @param value is the Graph's node
  * @return a pointer to wrapped instance
  */
-struct QueueNode *newNode(struct Node value) {
+struct QueueNode *newNode(void *value) {
     struct QueueNode *temp = (struct QueueNode *) malloc(sizeof(struct QueueNode));
 
     temp->value = value;
     temp->next = NULL;
 
     return temp;
-}
-
-
-
-/**
- * @function printQueue
- *
- * @brief prints a queue to stdout stream
- *
- * @param q is the queue instance to operate on
- */
-void printQueue(struct Queue *q) {
-    struct QueueNode *iter = q->front;
-
-    while (iter != NULL) {
-        printf("%s\n", iter->value.word);
-        iter = iter->next;
-    }
-
-    printf("----------\n");
 }

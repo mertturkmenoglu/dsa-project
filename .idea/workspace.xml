@@ -50,21 +50,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="1157" column="47" selection-start-line="1157" selection-start-column="47" selection-end-line="1157" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#1012#0" />
-                <element signature="e#1534#1914#0" />
-                <element signature="e#1915#2002#1" />
-                <element signature="e#2007#2384#0" />
-                <element signature="e#2385#2440#1" />
-                <element signature="e#2445#2770#0" />
-                <element signature="e#2771#2844#1" />
-                <element signature="e#2849#3188#0" />
-                <element signature="e#3189#3260#1" />
-                <element signature="e#3265#3344#0" />
-                <element signature="e#4495#7557#0" />
-              </folding>
+            <state relative-caret-position="1627">
+              <caret line="1147" column="1" lean-forward="true" selection-start-line="1147" selection-start-column="1" selection-end-line="1147" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -186,7 +173,7 @@
       <workItem from="1558572836832" duration="1416000" />
       <workItem from="1558604879112" duration="112000" />
       <workItem from="1558787567045" duration="8285000" />
-      <workItem from="1558797995028" duration="2218000" />
+      <workItem from="1558797995028" duration="3677000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -206,18 +193,18 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74913000" />
+    <option name="totallyTimeSpent" value="76372000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24635416" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.24635416" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.2497332" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32977587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6776447" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.5409182" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3992016" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -227,7 +214,7 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32845187" />
       <window_info anchor="bottom" id="CMake" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32657418" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3263473" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32934132" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -317,24 +304,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kelime.txt" />
+    <entry file="file://$PROJECT_DIR$/kelime.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="1157" column="47" selection-start-line="1157" selection-start-column="47" selection-end-line="1157" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#1012#0" />
-            <element signature="e#1534#1914#0" />
-            <element signature="e#1915#2002#1" />
-            <element signature="e#2007#2384#0" />
-            <element signature="e#2385#2440#1" />
-            <element signature="e#2445#2770#0" />
-            <element signature="e#2771#2844#1" />
-            <element signature="e#2849#3188#0" />
-            <element signature="e#3189#3260#1" />
-            <element signature="e#3265#3344#0" />
-            <element signature="e#4495#7557#0" />
-          </folding>
+        <state relative-caret-position="1627">
+          <caret line="1147" column="1" lean-forward="true" selection-start-line="1147" selection-start-column="1" selection-end-line="1147" selection-end-column="1" />
         </state>
       </provider>
     </entry>
