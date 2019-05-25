@@ -15,10 +15,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c1e3b1-bb0a-4071-9a8f-237b9fc1c649" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/mert.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/mert.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/dsa_project" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/dsa_project" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -54,17 +50,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
-              <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kelime.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25408">
-              <caret line="2153" column="5" selection-start-line="2153" selection-end-line="2153" selection-end-column="5" />
+            <state relative-caret-position="513">
+              <caret line="1157" column="47" selection-start-line="1157" selection-start-column="47" selection-end-line="1157" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#1012#0" />
+                <element signature="e#1534#1914#0" />
+                <element signature="e#1915#2002#1" />
+                <element signature="e#2007#2384#0" />
+                <element signature="e#2385#2440#1" />
+                <element signature="e#2445#2770#0" />
+                <element signature="e#2771#2844#1" />
+                <element signature="e#2849#3188#0" />
+                <element signature="e#3189#3260#1" />
+                <element signature="e#3265#3344#0" />
+                <element signature="e#4495#7557#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,7 +118,20 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="dsa_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dsa-project" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -173,6 +186,7 @@
       <workItem from="1558572836832" duration="1416000" />
       <workItem from="1558604879112" duration="112000" />
       <workItem from="1558787567045" duration="8285000" />
+      <workItem from="1558797995028" duration="2218000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -192,13 +206,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72695000" />
+    <option name="totallyTimeSpent" value="74913000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.24635416" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24635416" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.2497332" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32977587" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -288,13 +302,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testFile.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="30" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/testFile.txt" />
     <entry file="file:///usr/include/stdlib.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -309,17 +317,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kelime.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25408">
-          <caret line="2153" column="5" selection-start-line="2153" selection-end-line="2153" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kelime.txt" />
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
+        <state relative-caret-position="513">
+          <caret line="1157" column="47" selection-start-line="1157" selection-start-column="47" selection-end-line="1157" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#1012#0" />
+            <element signature="e#1534#1914#0" />
+            <element signature="e#1915#2002#1" />
+            <element signature="e#2007#2384#0" />
+            <element signature="e#2385#2440#1" />
+            <element signature="e#2445#2770#0" />
+            <element signature="e#2771#2844#1" />
+            <element signature="e#2849#3188#0" />
+            <element signature="e#3189#3260#1" />
+            <element signature="e#3265#3344#0" />
+            <element signature="e#4495#7557#0" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -73,7 +73,7 @@
  * @abstract a wrapping model for strings
  *
  * @discussion An abstraction level for expressing graph. An instance
- * of the struct holds the word and the level for given node.
+ * of the struct holds the word, level and the parent node for given node.
  *
  * @field word is the string for holding information.
  * @field level is the distance to the relative root at given time
@@ -143,7 +143,6 @@ struct QueueNode {
 
 /*
  * Function prototypes
- * TODO: Move this part to a separate header file
  */
 struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
 
@@ -301,7 +300,6 @@ int main() {
 
 
 
-// TODO: Code flow is too complex for bfs. This function should be split into smaller functions
 /**
  * @function bfs
  * @brief Breadth First Search algorithm implementation
@@ -352,13 +350,19 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
      * Start by enqueueing the starting node
      */
     enqueue(q, wordList[startingPoint]);
-    assert(q->front != NULL);
 
     /*
      * Allocate an array for holding marking information.
      * Calloc will assign first values as 0.
      */
     int *visited = (int *) calloc((size_t) wordCount, sizeof(int));
+
+    if (visited == NULL) {
+        perror("Unsuccessful array creation");
+        fprintf(stderr, "Error memory allocation: %s\n", strerror(errno));
+        free(q);
+        exit(EXIT_FAILURE);
+    }
 
     /*
      * Mark starting point as visited
@@ -410,19 +414,15 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
 
         for (i = 0; i < wordCount; i++) {
             /*
-             * Is it a neighbour?
+             * Is it a neighbour? Is it visited? If it is a neighbour and
+             * not visited, mark it as visited, assign the level and parent
+             * values then enqueue it.
              */
-            if (matrix[index][i] == 1) {
-                /*
-                 * Is it visited? If it is not, mark it as visited,
-                 * assign the level and parent values then enqueue it.
-                 */
-                if (visited[i] != 1) {
-                    visited[i] = 1;
-                    wordList[i].level = v->level + 1;
-                    wordList[i].parent = v;
-                    enqueue(q, wordList[i]);
-                }
+            if (matrix[index][i] == 1 && visited[i] != 1) {
+                visited[i] = 1;
+                wordList[i].level = v->level + 1;
+                wordList[i].parent = v;
+                enqueue(q, wordList[i]);
             }
         }
     }
@@ -498,14 +498,14 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
      */
     result = bfs(matrix, wordList, wordCount, start, end);
 
-    if (result == NULL) {
-        printf("There is no transformation between %s and %s\n", first, second);
-    } else {
+    if (result != NULL) {
         printf("There is a transformation between %s and %s: %d steps\n", first, second, result->step);
         for(i = 0; i < result->n; i++) {
             printf("%s\n", wordList[result->path[i]].word);
         }
         free(result);
+    } else {
+        printf("There is no transformation between %s and %s\n", first, second);
     }
 
     printf("----------------------\n\n");
@@ -587,16 +587,12 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
      */
     for (i = 0; i < lineCount; i++) {
         for (j = 0; j < lineCount; j++) {
-            matrix[i][j] = connection(wordList[i].word, wordList[j].word);
-            matrix[j][i] = matrix[i][j];
-
             /*
              * If it is a main diagonal element, mark it as zero because
              * there is no self-return links in the graph.
              */
-            if (i == j) {
-                matrix[i][j] = 0;
-            }
+            matrix[i][j] = (i == j) ? 0 : connection(wordList[i].word, wordList[j].word);
+            matrix[j][i] = matrix[i][j];
         }
     }
 
@@ -888,18 +884,24 @@ void printMatrix(int **matrix, struct Node *wordList, long n) {
 
 
 
-void printMenu() {
-    printf("1- Print Adjacency Matrix\n");
-    printf("2- isDifferentOneLetter\n");
-    printf("3- isTransformable\n");
-    printf("4- printNeighbours\n");
-    printf("0- Exit\n");
-    printf("-------------------------\n");
-}
-
-
-
-// TODO:
+/**
+ * @function printMatrixHandler
+ *
+ * @brief Handles how a matrix should print out
+ *
+ * @discussion
+ * <p>Function takes an integer matrix and prints its first n row x column
+ * formatted to stdout.
+ * Then prints n words of the wordList.
+ * @see {@code struct Node}
+ *
+ * @author Mert Turkmenoglu
+ * @bug No known bugs
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array of words
+ * @param lineCount is the number of words in the list
+ */
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrixHandler: NULL argument\n");
@@ -921,93 +923,64 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
 
 
-// TODO:
-int stringCompare(const char *str1, const char *str2) {
-    if (str1 == NULL || str2 == NULL) {
-        perror("\nstringCompare: NULL argument");
-        return 0;
+void printMenu() {
+    printf("1- Print Adjacency Matrix\n");
+    printf("2- isDifferentOneLetter\n");
+    printf("3- isTransformable\n");
+    printf("4- printNeighbours\n");
+    printf("0- Exit\n");
+    printf("-------------------------\n");
+}
+
+
+
+/**
+ * @function printNeighbours
+ *
+ * @brief prints all neighbours of a node
+ *
+ * @discussion
+ * <p>This function takes an index and prints all neighbours of
+ * that index.
+ *
+ * @see @see {@code struct Node}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array of words
+ * @param index index number of the word
+ * @param length of wordList array
+ */
+void printNeighbours(int **matrix, struct Node *wordList, int index, int wordCount) {
+    int i;
+
+    for (i = 0; i < wordCount; i++) {
+        if (matrix[index][i] == 1) {
+            printf("%s\n", wordList[i].word);
+        }
     }
-    int i = 0;
-
-    while ((i < ACTUAL_WORD_LENGTH) && (str1[i] == str2[i]))
-        i++;
-
-    return (i == ACTUAL_WORD_LENGTH) ? 1 : 0;
 }
 
 
 
-// TODO:
-struct QueueNode *newNode(struct Node value) {
-    struct QueueNode *temp = (struct QueueNode *) malloc(sizeof(struct QueueNode));
-
-    temp->value = value;
-    temp->next = NULL;
-
-    return temp;
-}
-
-
-
-// TODO:
-struct Queue *createQueue() {
-    struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
-
-    q->front = NULL;
-    q->rear = NULL;
-
-    return q;
-}
-
-
-
-// TODO:
-void enqueue(struct Queue *q, struct Node value) {
-    struct QueueNode *temp = newNode(value);
-
-    if (q->rear == NULL) {
-        q->front = temp;
-        q->rear = temp;
-        return;
-    }
-
-    q->rear->next = temp;
-    q->rear = temp;
-}
-
-
-
-// TODO:
-struct QueueNode *dequeue(struct Queue *q) {
-    if (q->front == NULL)
-        return NULL;
-
-    struct QueueNode *temp = q->front;
-    q->front = q->front->next;
-
-    if (q->front == NULL)
-        q->rear = NULL;
-
-    return temp;
-}
-
-
-
-// TODO:
-void printQueue(struct Queue *q) {
-    struct QueueNode *iter = q->front;
-
-    while (iter != NULL) {
-        printf("%s\n", iter->value.word);
-        iter = iter->next;
-    }
-
-    printf("----------\n");
-}
-
-
-
-// TODO:
+/**
+ * @function printNeighboursHandler
+ *
+ * @brief Handles how neighbours of a node will be printed
+ *
+ * @discussion
+ * <p>Function takes adjacency matrix of a graph, list of the nodes and
+ * total node count. Then takes input from user, finds the index number
+ * of the word then calls @see printNeighbours
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param matrix is the adjacency matrix
+ * @param wordList is the array of words
+ * @param lineCount is the length of wordList array
+ * @return
+ */
 void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) {
     char str[MAX_WORD_LENGTH];
 
@@ -1027,13 +1000,170 @@ void printNeighboursHandler(int **matrix, struct Node *wordList, int lineCount) 
 
 
 
-// TODO:
-void printNeighbours(int **matrix, struct Node *wordList, int index, int wordCount) {
-    int i;
-
-    for (i = 0; i < wordCount; i++) {
-        if (matrix[index][i] == 1) {
-            printf("%s\n", wordList[i].word);
-        }
+/**
+ * @function stringCompare
+ *
+ * @brief compares two given strings
+ *
+ * @discussion
+ * <p>Function takes two constant char pointer two strings.
+ * Then compares first {@see ACTUAL_WORD_LENGTH} characters.
+ * If they are equal, it returns true, else false.
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param str1 is the first string
+ * @param str2 is the second string
+ * @return if they are equal or not
+ */
+int stringCompare(const char *str1, const char *str2) {
+    if (str1 == NULL || str2 == NULL) {
+        perror("\nstringCompare: NULL argument");
+        return 0;
     }
+    int i = 0;
+
+    while ((i < ACTUAL_WORD_LENGTH) && (str1[i] == str2[i]))
+        i++;
+
+    return (i == ACTUAL_WORD_LENGTH) ? 1 : 0;
+}
+
+
+
+/**
+ * @function createQueue
+ *
+ * @brief creates a struct Queue instance
+ *
+ * @discussion
+ * <p>Function allocates memory for a queue instance then
+ * assigns front and rear pointers to NULL.
+ *
+ * @see {@code struct Queue}
+ * @see {@code struct QueueNode}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @return pointer to queue instance
+ */
+struct Queue *createQueue() {
+    struct Queue *q = (struct Queue*) malloc(sizeof(struct Queue));
+
+    q->front = NULL;
+    q->rear = NULL;
+
+    return q;
+}
+
+
+
+/**
+ * @function dequeue
+ *
+ * @brief deques element
+ *
+ * @discussion
+ * <p> Function removes the first element of the queue
+ * and returns the element. If it is empty, returns NULL.
+ *
+ * @see {@code struct Queue}
+ * @see {@code struct QueueNode}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param q is the queue instance to operate on
+ * @return the first element of the queue
+ */
+struct QueueNode *dequeue(struct Queue *q) {
+    if (q->front == NULL)
+        return NULL;
+
+    struct QueueNode *temp = q->front;
+    q->front = q->front->next;
+
+    if (q->front == NULL)
+        q->rear = NULL;
+
+    return temp;
+}
+
+
+
+/**
+ * @function enqueue
+ *
+ * @brief Adds new element to queue
+ *
+ * @discussion
+ * <p>Function adds a new element to end of the queue.
+ *
+ * @see {@code struct Queue}
+ * @see {@code struct QueueNode}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param q is the queue instance to operate on
+ * @param value is the new element to add queue
+ */
+void enqueue(struct Queue *q, struct Node value) {
+    struct QueueNode *temp = newNode(value);
+
+    if (q->rear == NULL) {
+        q->front = temp;
+        q->rear = temp;
+        return;
+    }
+
+    q->rear->next = temp;
+    q->rear = temp;
+}
+
+
+
+/**
+ * @function newNode
+ *
+ * @brief creates a new node for queue
+ *
+ * @discussion
+ * <p>Function wraps a Graph Node value with
+ * necessary queue values and returns a pointer to it.
+ *
+ * @see {@code struct Node}
+ * @see {@code struct Queue}
+ * @see {@code struct QueueNode}
+ *
+ * @author Mert Turkmenoglu
+ *
+ * @param value is the Graph's node
+ * @return a pointer to wrapped instance
+ */
+struct QueueNode *newNode(struct Node value) {
+    struct QueueNode *temp = (struct QueueNode *) malloc(sizeof(struct QueueNode));
+
+    temp->value = value;
+    temp->next = NULL;
+
+    return temp;
+}
+
+
+
+/**
+ * @function printQueue
+ *
+ * @brief prints a queue to stdout stream
+ *
+ * @param q is the queue instance to operate on
+ */
+void printQueue(struct Queue *q) {
+    struct QueueNode *iter = q->front;
+
+    while (iter != NULL) {
+        printf("%s\n", iter->value.word);
+        iter = iter->next;
+    }
+
+    printf("----------\n");
 }
