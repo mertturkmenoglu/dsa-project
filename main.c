@@ -102,6 +102,7 @@ struct Node {
 struct Path {
     int *path;
     int n;
+    int step;
 };
 
 
@@ -144,7 +145,7 @@ struct QueueNode {
 /*
  * Function prototypes
  */
-int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
+struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
 
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
 
@@ -335,10 +336,10 @@ int main() {
  * @param endingPoint is the ending node index
  * @return transformation path or NULL
  */
-int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nbfs: NULL argument\n");
-        return -1;
+        return NULL;
     }
 
     int i;
@@ -394,8 +395,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
 
             path->path = (int*) malloc((v->level + 1) * sizeof(int));
             path->n = v->level + 1;
-
-            int level = v->level;
+            path->step = v->level;
             int j = v->level;
 
             while(v != NULL) {
@@ -403,18 +403,12 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
                 v = v->parent;
             }
 
-            for(i = 0; i < path->n; i++) {
-                printf("%s\n", wordList[path->path[i]].word);
-            }
-
             free(dequed);
             free(v);
-            free(path->path);
-            free(path);
             free(q);
             free(visited);
 
-            return level;
+            return path;
         }
 
         /**
@@ -452,7 +446,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
      * If queue becomes empty, there is no transformation between given words.
      * Return failure value
      */
-    return -1;
+    return NULL;
 }
 
 
@@ -486,9 +480,10 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
         return;
     }
 
+    int i;
     char first[MAX_WORD_LENGTH];
     char second[MAX_WORD_LENGTH];
-    int result;
+    struct Path *result;
 
     /*
      * Read starting and ending strings from user.
@@ -515,8 +510,15 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
      */
     result = bfs(matrix, wordList, wordCount, start, end);
 
-    if (result != -1) {
-        printf("There is a transformation between %s and %s: %d steps\n", first, second, result);
+    if (result != NULL) {
+        printf("There is a transformation between %s and %s: %d steps\n", first, second, result->step);
+
+        for(i = 0; i < result->n; i++) {
+            printf("%s\n", wordList[result->path[i]].word);
+        }
+
+        free(result->path);
+        free(result);
     } else {
         printf("There is no transformation between %s and %s\n", first, second);
     }
