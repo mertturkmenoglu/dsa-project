@@ -15,6 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c1e3b1-bb0a-4071-9a8f-237b9fc1c649" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/dsa_project.dir/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/dsa_project" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/dsa_project" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -50,45 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="609" column="45" selection-start-line="609" selection-start-column="45" selection-end-line="609" selection-end-column="45" />
-              <folding>
-                <element signature="e#4495#7557#0" />
-                <element signature="e#7657#8723#0" />
-                <element signature="e#7524#11866#0" />
-                <element signature="e#11892#12683#0" />
-                <element signature="e#14001#16339#0" />
-                <element signature="e#16356#17614#1" />
-                <element signature="e#17662#18692#0" />
-                <element signature="e#17638#19484#0" />
-                <element signature="e#19412#20432#0" />
-                <element signature="e#20389#20806#1" />
-                <element signature="e#20854#21300#0" />
-                <element signature="e#21257#21843#1" />
-                <element signature="e#21891#22372#0" />
-                <element signature="e#22329#22795#1" />
-                <element signature="e#22843#23383#0" />
-                <element signature="e#23340#23793#1" />
-                <element signature="e#23841#24284#0" />
-                <element signature="e#24241#24891#1" />
-                <element signature="e#24840#25283#0" />
-                <element signature="e#24904#25405#1" />
-                <element signature="e#24939#25183#0" />
-                <element signature="e#26062#26183#0" />
-                <element signature="e#25666#25902#1" />
-                <element signature="e#26709#26830#0" />
-                <element signature="e#25915#26339#1" />
-                <element signature="e#27631#27752#0" />
-                <element signature="e#26352#26660#1" />
-                <element signature="e#28349#28470#0" />
-                <element signature="e#28351#28507#0" />
-                <element signature="e#28843#28964#0" />
-                <element signature="e#28511#28753#0" />
-                <element signature="e#29457#29578#0" />
-                <element signature="e#28757#29009#0" />
-                <element signature="e#30040#30161#0" />
-                <element signature="e#30041#30240#0" />
-              </folding>
+            <state relative-caret-position="10975">
+              <caret line="439" column="9" selection-start-line="439" selection-start-column="9" selection-end-line="439" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -111,6 +77,7 @@
       <find>glo</find>
       <find>cloze</find>
       <find>think</find>
+      <find>runi</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -132,10 +99,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="575" />
-    <option name="y" value="65" />
-    <option name="width" value="949" />
-    <option name="height" value="1015" />
+    <option name="x" value="508" />
+    <option name="y" value="94" />
+    <option name="width" value="939" />
+    <option name="height" value="1013" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -143,7 +110,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,6 +121,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -164,7 +131,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
+    <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -210,7 +177,9 @@
       <workItem from="1558572836832" duration="1416000" />
       <workItem from="1558604879112" duration="112000" />
       <workItem from="1558787567045" duration="8285000" />
-      <workItem from="1558797995028" duration="4579000" />
+      <workItem from="1558797995028" duration="4845000" />
+      <workItem from="1558802844482" duration="32000" />
+      <workItem from="1558831151753" duration="10320000" />
     </task>
     <task id="LOCAL-00001" summary="Change BFS return value&#10;&#10;BFS should calculate how many steps it takes to reach to &#10;searching word.">
       <created>1558332570973</created>
@@ -230,18 +199,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77274000" />
+    <option name="totallyTimeSpent" value="87892000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1080" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.24635416" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24635416" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.2497332" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32977587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.5409182" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.40618762" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3992016" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -251,7 +219,7 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32845187" />
       <window_info anchor="bottom" id="CMake" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.3263473" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3253493" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32934132" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -327,13 +295,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testFile.txt" />
-    <entry file="file:///usr/include/stdlib.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="562" column="12" selection-start-line="562" selection-start-column="12" selection-end-line="562" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/stdio.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -343,52 +304,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kelime.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+        <state relative-caret-position="321">
+          <caret line="1707" column="4" selection-start-line="1707" selection-end-line="1707" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/stdlib.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="562" column="24" selection-start-line="562" selection-start-column="24" selection-end-line="562" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="609" column="45" selection-start-line="609" selection-start-column="45" selection-end-line="609" selection-end-column="45" />
-          <folding>
-            <element signature="e#4495#7557#0" />
-            <element signature="e#7657#8723#0" />
-            <element signature="e#7524#11866#0" />
-            <element signature="e#11892#12683#0" />
-            <element signature="e#14001#16339#0" />
-            <element signature="e#16356#17614#1" />
-            <element signature="e#17662#18692#0" />
-            <element signature="e#17638#19484#0" />
-            <element signature="e#19412#20432#0" />
-            <element signature="e#20389#20806#1" />
-            <element signature="e#20854#21300#0" />
-            <element signature="e#21257#21843#1" />
-            <element signature="e#21891#22372#0" />
-            <element signature="e#22329#22795#1" />
-            <element signature="e#22843#23383#0" />
-            <element signature="e#23340#23793#1" />
-            <element signature="e#23841#24284#0" />
-            <element signature="e#24241#24891#1" />
-            <element signature="e#24840#25283#0" />
-            <element signature="e#24904#25405#1" />
-            <element signature="e#24939#25183#0" />
-            <element signature="e#26062#26183#0" />
-            <element signature="e#25666#25902#1" />
-            <element signature="e#26709#26830#0" />
-            <element signature="e#25915#26339#1" />
-            <element signature="e#27631#27752#0" />
-            <element signature="e#26352#26660#1" />
-            <element signature="e#28349#28470#0" />
-            <element signature="e#28351#28507#0" />
-            <element signature="e#28843#28964#0" />
-            <element signature="e#28511#28753#0" />
-            <element signature="e#29457#29578#0" />
-            <element signature="e#28757#29009#0" />
-            <element signature="e#30040#30161#0" />
-            <element signature="e#30041#30240#0" />
-          </folding>
+        <state relative-caret-position="10975">
+          <caret line="439" column="9" selection-start-line="439" selection-start-column="9" selection-end-line="439" selection-end-column="9" />
         </state>
       </provider>
     </entry>

@@ -102,7 +102,6 @@ struct Node {
 struct Path {
     int *path;
     int n;
-    int step;
 };
 
 
@@ -145,7 +144,7 @@ struct QueueNode {
 /*
  * Function prototypes
  */
-struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
+int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint);
 
 void bfsHandler(int **matrix, struct Node *wordList, int wordCount);
 
@@ -161,7 +160,7 @@ int fileLineCount(FILE *fptr);
 
 int getIndex(struct Node *wordList, const char str[MAX_WORD_LENGTH], int wordCount);
 
-void printMatrix(int **matrix, struct Node *wordList, long n);
+void printMatrix(int **matrix, struct Node *wordList, int rowStart, int rowEnd, int colStart, int colEnd);
 
 void printMenu();
 
@@ -290,6 +289,15 @@ int main() {
 
     } while (flag == 1);
 
+    /*
+     * Free dynamically allocated memory
+     */
+    for (i = 0; i < lineCount; i++) {
+        int* currentIntPtr = matrix[i];
+        free(currentIntPtr);
+    }
+
+
     fclose(fptr);
     free(matrix);
     free(wordList);
@@ -327,10 +335,10 @@ int main() {
  * @param endingPoint is the ending node index
  * @return transformation path or NULL
  */
-struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
+int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, int endingPoint) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nbfs: NULL argument\n");
-        return NULL;
+        return -1;
     }
 
     int i;
@@ -384,8 +392,8 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
 
             path->path = (int*) malloc((v->level + 1) * sizeof(int));
             path->n = v->level + 1;
-            path->step = v->level;
 
+            int level = v->level;
             int j = v->level;
 
             while(v != NULL) {
@@ -393,10 +401,16 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
                 v = v->parent;
             }
 
+            for(i = 0; i < path->n; i++) {
+                printf("%s\n", wordList[path->path[i]].word);
+            }
+
+            free(path->path);
+            free(path);
             free(q);
             free(visited);
 
-            return path;
+            return level;
         }
 
         /**
@@ -433,7 +447,7 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
      * If queue becomes empty, there is no transformation between given words.
      * Return failure value
      */
-    return NULL;
+    return -1;
 }
 
 
@@ -467,10 +481,9 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
         return;
     }
 
-    int i;
     char first[MAX_WORD_LENGTH];
     char second[MAX_WORD_LENGTH];
-    struct Path *result;
+    int result;
 
     /*
      * Read starting and ending strings from user.
@@ -497,12 +510,8 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
      */
     result = bfs(matrix, wordList, wordCount, start, end);
 
-    if (result != NULL) {
-        printf("There is a transformation between %s and %s: %d steps\n", first, second, result->step);
-        for(i = 0; i < result->n; i++) {
-            printf("%s\n", wordList[result->path[i]].word);
-        }
-        free(result);
+    if (result != -1) {
+        printf("There is a transformation between %s and %s: %d steps\n", first, second, result);
     } else {
         printf("There is no transformation between %s and %s\n", first, second);
     }
@@ -579,9 +588,10 @@ int createAdjacencyMatrix(FILE *fptr, int **matrix, struct Node *wordList, int l
         strcpy(structNode->word, tmp);
         structNode->level = 0;
         wordList[i++] = *structNode;
+        free(structNode);
     }
 
-    /*
+    /*g
      * Browse the matrix and assign the connection value
      */
     for (i = 0; i < lineCount; i++) {
@@ -899,7 +909,7 @@ int getIndex(struct Node *wordList, const char str[MAX_WORD_LENGTH], int wordCou
  * @param wordList is the array of words
  * @param n is the number of lines will be printed
  */
-void printMatrix(int **matrix, struct Node *wordList, long n) {
+void printMatrix(int **matrix, struct Node *wordList, int rowStart, int rowEnd, int colStart, int colEnd) {
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrix: NULL argument\n");
         return;
@@ -908,26 +918,22 @@ void printMatrix(int **matrix, struct Node *wordList, long n) {
     int i, j;
 
     printf("\t\t");
-    for (i = 0; i < n; i++) {
-        printf("%d\t", i + 1);
+    for (i = colStart; i < colEnd; i++) {
+        printf(".%d\t", (i + 1) % 10);
     }
 
     printf("\n");
-    for (i = 0; i < 5 * n; i++) {
+    for (i = 0; i < 9 * (colEnd-colStart); i++) {
         printf("-");
     }
     printf("\n");
 
-    for (i = 0; i < n; i++) {
+    for (i = rowStart; i < rowEnd; i++) {
         printf("%d|\t\t", i + 1);
-        for (j = 0; j < n; j++) {
+        for (j = colStart; j < colEnd; j++) {
             printf("%d\t", matrix[i][j]);
         }
         printf("\n");
-    }
-
-    for (i = 0; i < n; i++) {
-        printf("%d-%s", i + 1, wordList[i].word);
     }
 }
 
@@ -952,6 +958,8 @@ void printMatrix(int **matrix, struct Node *wordList, long n) {
  * @param lineCount is the number of words in the list
  */
 void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
+    int i;
+
     if (matrix == NULL || wordList == NULL) {
         perror("\nprintMatrixHandler: NULL argument\n");
         return;
@@ -959,15 +967,43 @@ void printMatrixHandler(int **matrix, struct Node *wordList, int lineCount) {
 
     char *charptr;
     char str[MAX_STDIN_LENGTH];
-    long tmp;
+    int rowStart;
+    int rowEnd;
+    int colStart;
+    int colEnd;
+
+    printf("\nPlease make sure that entered number of elements can be displayed on your terminal");
+    printf("\nUser has to be sure about his / her terminal's display capacity");
 
     do {
-        printf("\nHow many rows do you want to see?\n");
+        printf("\nStarting row index: \n");
         scanf("%s", str);
-        tmp = strtol(str, &charptr, NUMBER_BASE);
-    } while ((tmp <= 0) || (tmp > lineCount));
+        rowStart = strtol(str, &charptr, NUMBER_BASE);
+    } while ((rowStart <= 0) || (rowStart > lineCount));
 
-    printMatrix(matrix, wordList, tmp);
+    do {
+        printf("\nEnding row index: \n");
+        scanf("%s", str);
+        rowEnd = strtol(str, &charptr, NUMBER_BASE);
+    } while ((rowEnd <= 0) || (rowEnd > lineCount));
+
+    do {
+        printf("\nStarting column index: \n");
+        scanf("%s", str);
+        colStart = strtol(str, &charptr, NUMBER_BASE);
+    } while ((colStart <= 0) || (colStart > lineCount));
+
+    do {
+        printf("\nEnding column index: \n");
+        scanf("%s", str);
+        colEnd = strtol(str, &charptr, NUMBER_BASE);
+    } while ((colEnd <= 0) || (colEnd > lineCount));
+
+    printMatrix(matrix, wordList, rowStart, rowEnd, colStart, colEnd);
+
+    for (i = rowStart; i < rowEnd; i++) {
+        printf("%d-%s", i + 1, wordList[i].word);
+    }
 }
 
 
