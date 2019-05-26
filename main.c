@@ -383,7 +383,9 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
         /*
          * Get the first node
          */
-        struct Node *v = (struct Node *) ((struct QueueNode *) dequeue(q))->value;
+        struct QueueNode *dequed = dequeue(q);
+        struct Node *v = dequed->value;
+
         int result = stringCompare(wordList[endingPoint].word, v->word);
 
         /* Is it the searched one? */
@@ -405,6 +407,8 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
                 printf("%s\n", wordList[path->path[i]].word);
             }
 
+            free(dequed);
+            free(v);
             free(path->path);
             free(path);
             free(q);
@@ -438,6 +442,7 @@ int bfs(int **matrix, struct Node *wordList, int wordCount, int startingPoint, i
                 enqueue(q, (void*) &wordList[i]);
             }
         }
+        free(dequed);
     }
 
     free(q);
