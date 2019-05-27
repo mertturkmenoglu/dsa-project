@@ -6,6 +6,58 @@
  * if you can convert the first word to second word and if you can,
  * print the path.
  *
+ * I need to explain some unspecified points of the program. In my implementation,
+ * I use the standard BFS algorithm to find a path between two given nodes. It aims to
+ * find the optimal path between the nodes but you may consider that it finds an convenient
+ * path. Pseudo code is basic but some behaviours are implementation-depended.
+ *
+ * I use this pseudo code (course instructor gives a similar pseudo code) and my source is
+ * Algorithms(Fourth Edition) by Robert Sedgewick and Kevin Wayne:
+ *
+ *
+ *
+ *
+ *
+ * PATH bfs(graph, matrix, startingPoint, endingPoint) {
+ * >>> queue = new Queue()
+ * >>>
+ * >>> queue.enqueue(graph[startingPoint])
+ * >>> visited = []
+ * >>>
+ * >>> for each element of visited {
+ * >>> >>> element = UNVISITED
+ * >>> }
+ * >>>
+ * >>> visited[startingPoint] = VISITED
+ * >>>
+ * >>> while(queue.isEmpty() == false) {
+ * >>> >>> v = queue.dequeue()
+ * >>> >>>
+ * >>> >>> if (v.word == graph[endingPoint].word) {
+ * >>> >>> >>> path = new Path()
+ * >>> >>> >>> path.n = v.level + 1
+ * >>> >>> >>> path.step = v.level
+ * >>> >>> >>> j = v.level
+ * >>> >>> >>> while(v != null) {
+ * >>> >>> >>> >>> path.path[j--] = getIndex(v.word)
+ * >>> >>> >>> >>> v = v.parent
+ * >>> >>> >>> }
+ * >>> >>> >>> return path
+ * >>> >>> }
+ * >>> >>>
+ * >>> >>> index = getIndex(v.word)
+ * >>> >>> for i in [0, wordCount) {
+ * >>> >>> >>> if (matrix[index][i] == true && visited[i] == false) {
+ * >>> >>> >>> >>> visited[i] = true
+ * >>> >>> >>> >>> wordList[i].level = v.level + 1
+ * >>> >>> >>> >>> wordList[i].parent = v
+ * >>> >>> >>> >>> queue.enqueue(wordList[i]
+ * >>> >>> >>> }
+ * >>> >>> }
+ * >>> }
+ * >>>
+ * >>> return null
+ *
  *
  *
  * !!!IMPORTANT!!!
@@ -521,6 +573,9 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
         free(result);
     } else {
         printf("There is no transformation between %s and %s\n", first, second);
+        printf("\n\nIMPORTANT\n\n");
+        printf("IF YOU ARE SURE THAT THERE SHOULD BE A TRANSFORMATION, PLEASE CHECK THE WORD LIST\n");
+        printf("MAKE SURE THAT FILE CONTAINS THE WORD AND FILE FORMAT IS CORRECT\n");
     }
 
     printf("----------------------\n\n");
