@@ -87,6 +87,9 @@
  *
  *
  * stdPath = /home/mert/codes/dsa-project/kelime.txt
+ * 
+ * To compile: 
+ * gcc -o main main.c -Wextra -Wall -g -std=c90
  *
  *
  *
@@ -471,7 +474,7 @@ struct Path *bfs(int **matrix, struct Node *wordList, int wordCount, int startin
          * change because of the implementation dependency. I do not think this requirement
          * is necessary. I think this should be removed. So I added a to-do comment.
          */
-        // TODO: Remove printf() call for given reasons
+        /* TODO: Remove printf() call for given reasons */
         printf("\nCurrent Node: %s\n", v->word);
         int index = getIndex(wordList, v->word, wordCount);
 
@@ -598,12 +601,6 @@ void bfsHandler(int **matrix, struct Node *wordList, int wordCount) {
  * are not neighbours. Graph does not contain any self return links. So elements of
  * the main diagonal of the matrix are always zero. Otherwise, other operations may
  * be performed unnecessarily.
- *
- * <p>Call for this function comes after user choosing the transformation action.
- * After the call, function will ask two string input for user and reads it from
- * stdin. Then it will call the {@link getIndex} and assign the index values of
- * strings. Then it will call {@link bfs} and wait for the return value. After bfs
- * call, it will print the outcome of the function.
  *
  * <p>{@code FILE* fptr}, {@code int **matrix} and {@code struct Node *wordList} are
  * must be initialized. They cannot be NULL. So before this function call, file stream
